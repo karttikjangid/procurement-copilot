@@ -5,3 +5,7 @@ __pycache__/
 .DS_Store
 .pytest_cache/
 evals/results_*.csv
+# NOTE: the starter ignored evals/results_*.csv; results are deliverables here, so they are committed.
+!evals/results_*.csv
+.venv*/
+*.log
