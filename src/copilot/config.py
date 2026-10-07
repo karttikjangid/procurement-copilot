@@ -47,7 +47,7 @@ def vendor_risk_base_url() -> str:
 
 
 def model_name() -> str:
-    return os.getenv("MODEL_NAME", "gemini-3.8-flash")
+    return os.getenv("MODEL_NAME", "gemini-3.7-flash")
 
 
 def llm_mode() -> str:

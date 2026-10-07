@@ -60,7 +60,10 @@ class GeminiClient:
         self._client = None
         if self.mode == "off":
             raise LLMUnavailable("LLM_MODE=off")
-        if self.mode == "live":
+        self.provider = os.getenv("LLM_PROVIDER", "gemini").strip().lower()
+        if self.mode == "live" and self.provider == "openai":
+            self.base_url = os.getenv("LLM_BASE_URL", "http://localhost:1234/v1").rstrip("/")
+        elif self.mode == "live":
             key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
             if not key:
                 raise LLMUnavailable("GOOGLE_API_KEY is not set")
@@ -79,7 +82,7 @@ class GeminiClient:
         if response_schema:
             config_kwargs["response_mime_type"] = "application/json"
             config_kwargs["response_json_schema"] = response_schema
-        key_material = json.dumps(_strip({"model": self.model, "salt": os.getenv("LLM_CACHE_SALT", ""),
+        key_material = json.dumps(_strip({"model": self.model, "provider": getattr(self, "provider", "gemini"), "salt": os.getenv("LLM_CACHE_SALT", ""),
                                           "system": system, "contents": _dump(contents),
                                           "tools": _dump(tools), "schema": response_schema}), sort_keys=True)
         key = hashlib.sha256(key_material.encode()).hexdigest()[:24]
@@ -96,7 +99,10 @@ class GeminiClient:
             return types.GenerateContentResponse.model_validate(entry["response"])
         if self.mode == "replay":
             raise LLMUnavailable(f"replay mode: no recording for {label} ({key})")
-        response, latency = self._call_with_retry(types.GenerateContentConfig(**config_kwargs), contents)
+        if self.provider == "openai":
+            response, latency = self._openai_call(system, contents, tools, response_schema)
+        else:
+            response, latency = self._call_with_retry(types.GenerateContentConfig(**config_kwargs), contents)
         self.stats.latency_ms += latency
         usage = getattr(response, "usage_metadata", None)
         if usage:
@@ -130,11 +136,90 @@ class GeminiClient:
                 code = getattr(exc, "code", None)
                 retryable = code in (429, 500, 502, 503, 504) or "RESOURCE_EXHAUSTED" in text or "UNAVAILABLE" in text or "timed out" in text.lower() or "timeout" in type(exc).__name__.lower()
                 self.stats.log.append({"label": "retry", "error": text[:120]})
+                if "PerDay" in text or "per day" in text.lower():
+                    retryable = False  # daily quota: retrying only wastes time
                 if not retryable or attempt == 5:
                     break
                 m = re.search(r"retry(?:Delay| in)[\"': ]+([0-9.]+)s", text)
                 time.sleep(min(float(m.group(1)) + 1 if m else 3 * (attempt + 1), 65))
         raise LLMUnavailable(f"{type(last_exc).__name__}: {str(last_exc)[:300]}")
+
+
+    # ------------------------------------------------------------ OpenAI-compatible (LM Studio, vLLM, Ollama)
+    def _openai_call(self, system: str, contents: list, tools: list | None, schema: dict | None):
+        """Translate the Gemini-typed conversation to the OpenAI chat format and back,
+        so agents.py stays provider-agnostic."""
+        import requests
+        from google.genai import types
+        messages: list[dict[str, Any]] = [{"role": "system", "content": system}]
+        pending: list[tuple[str, str]] = []
+        n = 0
+        for content in contents:
+            role = "assistant" if content.role == "model" else "user"
+            texts, calls = [], []
+            for part in content.parts or []:
+                if part.function_call is not None:
+                    n += 1
+                    cid = f"call_{n}"
+                    pending.append((part.function_call.name, cid))
+                    calls.append({"id": cid, "type": "function", "function": {
+                        "name": part.function_call.name, "arguments": json.dumps(dict(part.function_call.args or {}))}})
+                elif part.function_response is not None:
+                    name = part.function_response.name
+                    idx = next((i for i, (nm, _) in enumerate(pending) if nm == name), 0 if pending else None)
+                    cid = pending.pop(idx)[1] if idx is not None else f"call_orphan_{name}"
+                    messages.append({"role": "tool", "tool_call_id": cid,
+                                     "content": json.dumps(part.function_response.response, default=str)})
+                elif part.text:
+                    texts.append(part.text)
+            if calls:
+                messages.append({"role": "assistant", "content": "\n".join(texts) or None, "tool_calls": calls})
+            elif texts:
+                messages.append({"role": role, "content": "\n".join(texts)})
+        body: dict[str, Any] = {"model": self.model, "messages": messages, "temperature": 0}
+        if tools:
+            body["tools"] = [{"type": "function", "function": {"name": d.name, "description": d.description,
+                                                              "parameters": d.parameters_json_schema}}
+                             for t in tools for d in (t.function_declarations or [])]
+        if schema:
+            body["response_format"] = {"type": "json_schema", "json_schema": {"name": "output", "schema": schema}}
+        timeout = float(os.getenv("LLM_TIMEOUT_S", "300"))
+        last = ""
+        for attempt in range(3):
+            start = time.perf_counter()
+            try:
+                r = requests.post(f"{self.base_url}/chat/completions", json=body, timeout=timeout)
+                if r.status_code >= 500 or r.status_code == 429:
+                    last = f"HTTP {r.status_code}: {r.text[:200]}"
+                    time.sleep(2 * (attempt + 1))
+                    continue
+                if r.status_code >= 400:
+                    raise LLMUnavailable(f"HTTP {r.status_code}: {r.text[:300]}")
+                payload = r.json()
+                latency = (time.perf_counter() - start) * 1000
+                break
+            except requests.RequestException as exc:
+                last = f"{type(exc).__name__}: {exc}"
+                time.sleep(2 * (attempt + 1))
+        else:
+            raise LLMUnavailable(f"OpenAI-compatible server failed: {last}")
+        msg = payload["choices"][0]["message"]
+        parts = []
+        for tc in msg.get("tool_calls") or []:
+            try:
+                args = json.loads(tc["function"].get("arguments") or "{}")
+            except json.JSONDecodeError:
+                args = {"_unparseable_arguments": tc["function"].get("arguments")}
+            parts.append(types.Part(function_call=types.FunctionCall(name=tc["function"]["name"], args=args)))
+        if msg.get("content") and not parts:
+            text = re.sub(r"<think>.*?</think>", "", msg["content"], flags=re.S).strip()
+            parts.append(types.Part.from_text(text=text))
+        usage = payload.get("usage") or {}
+        response = types.GenerateContentResponse(
+            candidates=[types.Candidate(content=types.Content(role="model", parts=parts or [types.Part.from_text(text="")]))],
+            usage_metadata=types.GenerateContentResponseUsageMetadata(
+                prompt_token_count=usage.get("prompt_tokens"), candidates_token_count=usage.get("completion_tokens")))
+        return response, latency
 
 
 def response_text(response) -> str:
