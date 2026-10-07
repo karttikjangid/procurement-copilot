@@ -153,7 +153,7 @@
     },
     "error": null,
     "source": "department_budgets.csv",
-    "latency_ms": 0.1
+    "latency_ms": 0.0
    },
    {
     "call_id": "T3",
@@ -214,7 +214,7 @@
     },
     "error": null,
     "source": "vendors.csv",
-    "latency_ms": 0.1
+    "latency_ms": 0.0
    },
    {
     "call_id": "T6",
@@ -293,14 +293,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],
@@ -313,6 +306,6 @@
    "output_tokens": 0,
    "log": []
   },
-  "wall_ms": 1.4
+  "wall_ms": 1.3
  }
 }

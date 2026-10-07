@@ -226,6 +226,7 @@
      "annual_software_budget_usd": 300000,
      "committed_usd": 274000,
      "available_usd": 26000.0,
+     "available_valid": true,
      "requested_annual_cost_usd": 30000.0,
      "within_available_budget": false,
      "shortfall_usd": 4000.0
@@ -320,7 +321,7 @@
     "data": null,
     "error": "vendor-risk service unavailable after 3 attempts (HTTP 503: {\"detail\":\"Upstream vendor assessment provider is temporarily unavailable.\"})",
     "source": "GET http://127.0.0.1:8011/EXT-25/none/vendor-risk/NimbusAI",
-    "latency_ms": 616.9
+    "latency_ms": 619.0
    },
    {
     "call_id": "T7",
@@ -415,14 +416,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],
@@ -435,6 +429,6 @@
    "output_tokens": 0,
    "log": []
   },
-  "wall_ms": 618.4
+  "wall_ms": 620.3
  }
 }

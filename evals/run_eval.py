@@ -170,7 +170,7 @@ def summarise(rows: list[dict], archs: list[str]) -> str:
         ("Avg LLM calls", lambda rs: mean([r["llm_calls"] for r in rs]), "{:.2f}"),
         ("Avg tool calls", lambda rs: mean([r["tool_calls"] for r in rs]), "{:.2f}"),
         ("Avg latency, s (LLM time as recorded)", lambda rs: mean([r["llm_ms"] for r in rs]) / 1000 + mean([max(0, r["wall_ms"] - r["llm_ms"]) for r in rs if not r["cache_hits"]] or [0]) / 1000, "{:.1f}"),
-        ("p95 LLM latency per case, s", lambda rs: sorted(r["llm_ms"] for r in rs)[int(0.95 * (len(rs) - 1))] / 1000, "{:.1f}"),
+        ("p95 LLM latency per case, s", lambda rs: sorted(r["llm_ms"] for r in rs)[min(len(rs) - 1, -(-95 * len(rs) // 100) - 1)] / 1000, "{:.1f}"),
         ("Avg input / output tokens", lambda rs: mean([r["tokens_in"] for r in rs]), "{:.0f}"),
         ("Runs where the LLM failed (fell back to code)", lambda rs: sum(1 for r in rs if r["llm_errors"]) / n(rs), "{:.0%}"),
         ("Raw LLM action matched label (before guardrail)", lambda rs: sum(1 for r in rs if r["raw_action_ok"] is True) / max(1, sum(1 for r in rs if r["raw_action_ok"] != "")), "{:.0%}"),

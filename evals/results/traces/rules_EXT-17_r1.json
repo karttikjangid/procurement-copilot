@@ -177,6 +177,7 @@
      "annual_software_budget_usd": 90000,
      "committed_usd": 61000,
      "available_usd": 29000.0,
+     "available_valid": true,
      "requested_annual_cost_usd": 600.0,
      "within_available_budget": true,
      "shortfall_usd": 0.0
@@ -222,7 +223,7 @@
     },
     "error": null,
     "source": "purchase_history.csv + requests.json",
-    "latency_ms": 0.1
+    "latency_ms": 0.2
    },
    {
     "call_id": "T5",
@@ -256,7 +257,7 @@
     "data": null,
     "error": "vendor-risk service unavailable after 3 attempts (timeout after 3.0s)",
     "source": "GET http://127.0.0.1:8011/EXT-17/timeout/vendor-risk/QuietNote",
-    "latency_ms": 9635.6
+    "latency_ms": 9626.5
    },
    {
     "call_id": "T7",
@@ -319,14 +320,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],
@@ -339,6 +333,6 @@
    "output_tokens": 0,
    "log": []
   },
-  "wall_ms": 9637.0
+  "wall_ms": 9627.9
  }
 }

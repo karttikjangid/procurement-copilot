@@ -17,7 +17,9 @@ LAST_TRACES: dict[str, dict[str, Any]] = {}
 
 APPROVAL_CLAIM = re.compile(
     r"\b(is|are|has been|have been|was|already) (pre-?)?approved\b|\bapprove (this|it|the request)\b|auto-?approv|"
-    r"\bno (further )?(review|approval)s? (is |are )?(needed|required)\b|\bcan (be )?(proceed|purchased) without\b",
+    r"\bno (further )?(review|approval)s? (is |are )?(needed|required)\b|\bcan (be )?(proceed|purchased) without\b|"
+    r"\b(not|no|isn't|aren't|doesn't|don't|never)\b[^.]{0,50}\b(required|needed|necessary|need)\b|"
+    r"\b(skip|skipped|waive|waived|bypass|omit|omitted|unnecessary)\b",
     re.IGNORECASE)
 
 
@@ -104,7 +106,6 @@ def check_claims(claims: list[dict] | None, tb: ToolBox) -> tuple[list[dict], li
         missing = [n for n in _numbers(finding) if n not in source_numbers and n.replace("-", "") not in source_numbers]
         # dates in a claim are split by _numbers into parts; check whole dates too
         dates_ok = all(d in blob for d in re.findall(r"\d{4}-\d{2}-\d{2}", finding))
-        missing = [n for n in missing if not re.fullmatch(r"\d{1,4}", n) or n not in blob]
         if missing or not dates_ok:
             ungrounded.append({**claim, "reason": f"values not found in {call.call_id}: {missing or 'date'}"})
         else:
@@ -243,7 +244,7 @@ def run_copilot(request: dict, architecture: str = "single") -> tuple[Procuremen
     final_raw = raw.get("final")
     signals = signals_from(final_raw)
     policy = evaluate(request, facts_from_calls(tb.calls), signals)
-    if not any(c.tool == "evaluate_policy" for c in tb.calls) or architecture != "single":
+    if not any(c.tool == "evaluate_policy" for c in tb.calls):
         record(tb, "evaluate_policy", {"signals": "final"}, True, policy.as_dict(), "src/copilot/policy.py")
     llm_ok = final_raw is not None
     if architecture in ("single", "staged") and (not llm_ok or raw.get("errors")):
@@ -277,7 +278,8 @@ def run_copilot(request: dict, architecture: str = "single") -> tuple[Procuremen
     label = ACTION_LABELS[policy.action]
     if policy.action in ("ROUTE_FOR_APPROVAL", "VERIFY_EVIDENCE_FIRST") and policy.approvals:
         label += f" ({', '.join(policy.ordered_approvals)})"
-    questions = [str(q) for q in (final_raw or {}).get("questions_for_requester") or []]
+    questions = [str(q)[:200] for q in (final_raw or {}).get("questions_for_requester") or []
+                 if not APPROVAL_CLAIM.search(str(q))][:3]
     decision = ProcurementDecision(
         request_id=str(request.get("request_id")),
         recommendation=f"{label}. {summary}",

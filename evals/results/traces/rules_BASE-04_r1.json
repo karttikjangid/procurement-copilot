@@ -214,6 +214,7 @@
      "annual_software_budget_usd": 140000,
      "committed_usd": 133000,
      "available_usd": 7000.0,
+     "available_valid": true,
      "requested_annual_cost_usd": 6000.0,
      "within_available_budget": true,
      "shortfall_usd": 0.0
@@ -330,7 +331,7 @@
     },
     "error": null,
     "source": "GET http://127.0.0.1:8011/BASE-04/none/vendor-risk/NeuralDesk",
-    "latency_ms": 0.7
+    "latency_ms": 0.6
    },
    {
     "call_id": "T7",
@@ -415,14 +416,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],

@@ -138,6 +138,7 @@ def check_budget(department: str, annual_cost_usd: Any = None):
         "annual_software_budget_usd": int(to_decimal(row["annual_software_budget_usd"]) or 0),
         "committed_usd": int(to_decimal(row["committed_usd"]) or 0),
         "available_usd": float(available) if available is not None else None,
+        "available_valid": available is not None,
         "requested_annual_cost_usd": float(cost) if cost is not None else None,
         "within_available_budget": within,
         "shortfall_usd": float(cost - available) if within is False else 0.0,

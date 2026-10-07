@@ -67,8 +67,13 @@ def system_prompt() -> str:
                          policy=data.policy_text())
 
 
+def _escape(text: str) -> str:
+    # Business data must not be able to close the data tag and speak as the system.
+    return text.replace("</", "<\\/").replace("<untrusted", "&lt;untrusted")
+
+
 def untrusted(request: dict) -> str:
-    return "<untrusted_data>\n" + json.dumps(request, indent=1, default=str) + "\n</untrusted_data>"
+    return "<untrusted_data>\n" + _escape(json.dumps(request, indent=1, default=str)) + "\n</untrusted_data>"
 
 
 def tool_declarations():
@@ -127,6 +132,7 @@ def run_single(request: dict, tb: ToolBox, llm: GeminiClient, policy_fn) -> dict
                 result = policy_fn(args)
             elif fc.name in GATHER_TOOLS:
                 result = _compact(tb.call(fc.name, **args))
+                result["data"] = json.loads(_escape(json.dumps(result.get("data"), default=str)))
             else:
                 result = {"ok": False, "error": f"unknown tool {fc.name}"}
             tool_budget -= 1
@@ -155,7 +161,7 @@ def gather_all(request: dict, tb: ToolBox) -> None:
 
 
 def evidence_pack(tb: ToolBox) -> str:
-    return "<untrusted_data>\n" + json.dumps([_compact(c) for c in tb.calls if c.tool != "evaluate_policy"], indent=1, default=str) + "\n</untrusted_data>"
+    return "<untrusted_data>\n" + _escape(json.dumps([_compact(c) for c in tb.calls if c.tool != "evaluate_policy"], indent=1, default=str)) + "\n</untrusted_data>"
 
 
 def run_staged(request: dict, tb: ToolBox, llm: GeminiClient, policy_fn) -> dict[str, Any]:
@@ -195,7 +201,9 @@ def _json_call(llm: GeminiClient, label: str, system: str, contents: list, schem
             out["errors"].append(f"{label}: {exc}")
             return None
         except (ValueError, json.JSONDecodeError) as exc:
-            out["errors"].append(f"{label}: invalid JSON ({exc})")
+            out.setdefault("retries", []).append(f"{label}: invalid JSON ({exc})")
+            if attempt == 1:
+                out["errors"].append(f"{label}: invalid JSON after retry ({exc})")
             contents = contents + [types.Content(role="user", parts=[types.Part.from_text(
                 text=f"Your previous answer was not valid for the schema: {exc}. Return valid JSON only.")])]
     return None

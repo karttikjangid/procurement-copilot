@@ -22,6 +22,11 @@ PATTERNS = [
     r"new instructions",
     r"(reveal|print|show|expose) (the |your )?(system prompt|api key|secrets?|credentials)",
     r"pre[- ]?approved vendor[,.]? skip",
+    r"leave (security|privacy|legal|finance|procurement|the cfo)[^.]{0,40}\b(off|out)\b",
+    r"(security|privacy|legal|finance|procurement)( team)? (has |have )?(already )?(given|signed|cleared|okayed|ok'd|green[- ]lit)",
+    r"green light",
+    r"(no need|not necessary) (for|to) (security|privacy|legal|review|approval)",
+    r"note (for|to) (the )?(ai|assistant|model|copilot|reviewer bot)",
 ]
 _COMPILED = [re.compile(p, re.IGNORECASE | re.MULTILINE) for p in PATTERNS]
 

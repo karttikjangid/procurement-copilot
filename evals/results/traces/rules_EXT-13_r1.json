@@ -169,13 +169,14 @@
      "annual_software_budget_usd": 90000,
      "committed_usd": 61000,
      "available_usd": 29000.0,
+     "available_valid": true,
      "requested_annual_cost_usd": 500.0,
      "within_available_budget": true,
      "shortfall_usd": 0.0
     },
     "error": null,
     "source": "department_budgets.csv",
-    "latency_ms": 0.1
+    "latency_ms": 0.0
    },
    {
     "call_id": "T3",
@@ -314,14 +315,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],

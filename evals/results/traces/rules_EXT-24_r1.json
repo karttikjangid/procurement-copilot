@@ -1,7 +1,7 @@
 {
  "decision": {
   "request_id": "X-24",
-  "recommendation": "Request clarification from the requester before any approval routing. Deterministic checks completed; see evidence and required approvals.",
+  "recommendation": "Route to the required human approvers (Manager, Security). Deterministic checks completed; see evidence and required approvals.",
   "evidence": [
    {
     "source": "lookup_requester",
@@ -43,14 +43,11 @@
    "Manager",
    "Security"
   ],
-  "missing_information": [
-   "Intended data access level is missing or unknown"
-  ],
+  "missing_information": [],
   "risk_flags": [
-   "missing_information",
    "security_review_required"
   ],
-  "next_step": "Send the request back to the requester and ask for: Intended data access level is missing or unknown. Re-run the analysis once answered; no approval routing until then.",
+  "next_step": "Send the evidence pack to: Manager, Security. Each approver decides; the copilot does not approve or purchase.",
   "human_review_required": true,
   "telemetry": {
    "llm_calls": 0,
@@ -70,31 +67,28 @@
   "request_id": "X-24",
   "architecture": "rules",
   "errors": [],
-  "action": "REQUEST_CLARIFICATION",
+  "action": "ROUTE_FOR_APPROVAL",
   "policy": {
-   "action": "REQUEST_CLARIFICATION",
-   "action_label": "Request clarification from the requester before any approval routing",
+   "action": "ROUTE_FOR_APPROVAL",
+   "action_label": "Route to the required human approvers",
    "approvals": {
     "Manager": [
      "annual amount $500.00 is in tier 'up to $1,000'"
     ],
     "Security": [
-     "data access level unknown: cannot rule out sensitive data (fail closed)"
+     "request involves confidential_documents"
     ]
    },
    "flags": {
-    "missing_information": [
-     "Intended data access level is missing or unknown"
-    ],
     "security_review_required": [
-     "data access level unknown: cannot rule out sensitive data (fail closed)"
+     "request involves confidential_documents"
     ]
    },
-   "missing_information": [
-    "Intended data access level is missing or unknown"
+   "missing_information": [],
+   "data_classes": [
+    "confidential_documents"
    ],
-   "data_classes": [],
-   "data_level_unknown": true,
+   "data_level_unknown": false,
    "vendor_assessment": {
     "registry_state": "approved_current",
     "registry_review_date": "2026-05-01",
@@ -172,6 +166,7 @@
      "annual_software_budget_usd": 90000,
      "committed_usd": 61000,
      "available_usd": 29000.0,
+     "available_valid": true,
      "requested_annual_cost_usd": 500.0,
      "within_available_budget": true,
      "shortfall_usd": 0.0
@@ -260,7 +255,7 @@
     },
     "error": null,
     "source": "GET http://127.0.0.1:8011/EXT-24/none/vendor-risk/QuietNote",
-    "latency_ms": 1.1
+    "latency_ms": 1.3
    },
    {
     "call_id": "T7",
@@ -270,29 +265,26 @@
     },
     "ok": true,
     "data": {
-     "action": "REQUEST_CLARIFICATION",
-     "action_label": "Request clarification from the requester before any approval routing",
+     "action": "ROUTE_FOR_APPROVAL",
+     "action_label": "Route to the required human approvers",
      "approvals": {
       "Manager": [
        "annual amount $500.00 is in tier 'up to $1,000'"
       ],
       "Security": [
-       "data access level unknown: cannot rule out sensitive data (fail closed)"
+       "request involves confidential_documents"
       ]
      },
      "flags": {
-      "missing_information": [
-       "Intended data access level is missing or unknown"
-      ],
       "security_review_required": [
-       "data access level unknown: cannot rule out sensitive data (fail closed)"
+       "request involves confidential_documents"
       ]
      },
-     "missing_information": [
-      "Intended data access level is missing or unknown"
+     "missing_information": [],
+     "data_classes": [
+      "confidential_documents"
      ],
-     "data_classes": [],
-     "data_level_unknown": true,
+     "data_level_unknown": false,
      "vendor_assessment": {
       "registry_state": "approved_current",
       "registry_review_date": "2026-05-01",
@@ -321,14 +313,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],
@@ -341,6 +326,6 @@
    "output_tokens": 0,
    "log": []
   },
-  "wall_ms": 1.7
+  "wall_ms": 2.3
  }
 }

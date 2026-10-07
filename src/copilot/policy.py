@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
+import re
 from typing import Any
 
 from src.copilot.config import SECURITY_REVIEW_VALID_DAYS, reference_date
@@ -32,6 +33,16 @@ DATA_LEVEL_CLASSES: dict[str, set[str]] = {
     "cloud_account": {"production"},
     "credentials": {"credentials"}, "secrets": {"credentials"},
 }
+APPROVED_WORDS = {"approved", "complete", "completed", "current", "passed"}
+# Keywords used when a data_access_level label is not in the taxonomy above.
+LEVEL_KEYWORDS: list[tuple[tuple[str, ...], str]] = [
+    (("customer", "client", "consumer", "patient"), "customer_pii"),
+    (("employee", "hr", "staff", "payroll", "personnel"), "employee_pii"),
+    (("source", "code", "repo"), "source_code"),
+    (("production", "prod", "cloud", "infrastructure"), "production"),
+    (("confidential", "board", "legal", "contract", "financial statement"), "confidential_documents"),
+    (("credential", "secret", "password", "token", "key"), "credentials"),
+]
 UNKNOWN_LEVELS = {"", "unknown", "tbd", "n/a", "na", "not sure", "unspecified", "null", "none provided"}
 
 # Integration keywords -> sensitive classes (case-insensitive substring match).
@@ -143,7 +154,7 @@ def review_state(status: Any, review_date: Any, ref: date) -> tuple[str, date | 
     s = str(status or "").strip().casefold()
     d = _parse_date(review_date)
     age = (ref - d).days if d else None
-    if s in {"approved", "complete", "completed", "current", "passed"}:
+    if s in APPROVED_WORDS:
         if d is None:
             return "missing", None, None
         if age is not None and age > SECURITY_REVIEW_VALID_DAYS:
@@ -169,22 +180,28 @@ def classify_data(request: dict) -> tuple[set[str], bool]:
         if level in DATA_LEVEL_CLASSES:
             classes |= DATA_LEVEL_CLASSES[level]
         else:
-            # Unrecognised label: map by keyword, else fail closed as unknown.
-            hit = False
-            for key, mapped in DATA_LEVEL_CLASSES.items():
-                if mapped and key in level:
-                    classes |= mapped
-                    hit = True
-            if "pii" in level or "personal" in level:
-                classes.add("customer_pii" if "customer" in level else "employee_pii")
-                hit = True
-            unknown = not hit and not any(k in level for k in ("internal", "public", "none"))
-    for integration in request.get("requested_integrations") or []:
+            # Unrecognised label: map sensitive keywords; anything not mapped is unknown
+            # (fail closed), even if it also says "internal".
+            words = set(re.findall(r"[a-z]+", level))
+            for keys, mapped in LEVEL_KEYWORDS:
+                if any(k in words or (len(k) > 4 and k in level) for k in keys):
+                    classes.add(mapped)
+            if "pii" in words or "personal" in words:
+                classes.add("employee_pii" if words & {"employee", "hr", "staff"} else "customer_pii")
+            unknown = not classes
+    integrations = request.get("requested_integrations") or []
+    if isinstance(integrations, str):
+        integrations = [x for x in re.split(r"[,;\n]", integrations) if x.strip()]
+    for integration in integrations:
         text = f" {str(integration).casefold()} "
         for keywords, mapped in INTEGRATION_KEYWORDS:
             if any(k in text for k in keywords):
                 classes.add(mapped)
     return classes, unknown
+
+
+def json_text(value: Any) -> str:
+    return value if isinstance(value, str) else " | ".join(str(v) for v in value or [])
 
 
 def _is_missing(value: Any) -> bool:
@@ -262,6 +279,9 @@ def evaluate(request: dict, facts: dict[str, Any], signals: Signals | None = Non
 
     # ---- Section 2: budget
     if budget and budget.get("found"):
+        if cost is not None and budget.get("within_available_budget") is None:
+            r.flag("budget_unverified", f"available budget for {budget.get('department')} is blank or invalid")
+            r.approve("Finance", "department budget could not be verified")
         if cost is not None:
             if budget["within_available_budget"] is False:
                 r.flag("budget_insufficient", f"cost ${cost:,.0f} exceeds available ${budget['available_usd']:,.0f} (shortfall ${budget['shortfall_usd']:,.0f})")
@@ -304,12 +324,14 @@ def evaluate(request: dict, facts: dict[str, Any], signals: Signals | None = Non
     if reg and api_found:
         reg_label = str(reg.get("security_status", "")).casefold()
         api_label = str(risk.get("security_review_status", "")).casefold()
-        reg_ok = reg_label in {"approved", "completed", "current"}
-        api_ok = api_label in {"approved", "completed", "current"}
+        reg_ok = reg_label in APPROVED_WORDS
+        api_ok = api_label in APPROVED_WORDS
         if reg_ok != api_ok:
             conflict_reasons.append(f"registry says '{reg.get('security_status')}' but vendor-risk service says '{risk.get('security_review_status')}'")
         if reg_date and api_date and reg_date != api_date:
             conflict_reasons.append(f"review dates differ (registry {reg_date}, service {api_date})")
+    if reg and api_available and not api_found and str(reg.get("security_status", "")).casefold() in APPROVED_WORDS:
+        conflict_reasons.append("registry says the security review is approved but the vendor-risk service has no record")
     if conflict_reasons:
         r.flag("conflicting_vendor_evidence", "; ".join(conflict_reasons))
         r.approve("Security", "registry and vendor-risk service disagree; manual verification required")
@@ -337,13 +359,14 @@ def evaluate(request: dict, facts: dict[str, Any], signals: Signals | None = Non
         r.flag("security_review_required", "; ".join(r.approvals["Security"]))
 
     # ---- Section 6: privacy
-    outside = bool(risk.get("stores_data_outside_region")) if api_found else None
+    outside_raw = risk.get("stores_data_outside_region") if api_found else None
+    outside = outside_raw if isinstance(outside_raw, bool) else None  # null/odd value = unknown, not "in region"
     pii = data_classes & PII_CLASSES
     if pii:
         r.approve("Privacy", f"tool will process {', '.join(sorted(pii))}")
     if outside and (sensitive or level_unknown):
         r.approve("Privacy", "vendor may store sensitive data outside the operating region")
-    if outside is None and (sensitive or level_unknown) and not api_found:
+    if outside is None and (sensitive or level_unknown):
         r.approve("Privacy", "data residency could not be verified for sensitive data (fail closed)")
     if "Privacy" in r.approvals:
         r.flag("privacy_review_required", "; ".join(r.approvals["Privacy"]))
@@ -372,9 +395,12 @@ def evaluate(request: dict, facts: dict[str, Any], signals: Signals | None = Non
 
     # ---- Section 9: prompt injection (deterministic scan + LLM signal; never changes rules)
     texts = {"business_justification": request.get("business_justification"),
-             "product_name": request.get("product_name"), "vendor_notes(registry)": reg.get("notes") if reg else None,
+             "product_name": request.get("product_name"), "vendor_name": request.get("vendor_name"),
+             "category": request.get("category"), "data_access_level": request.get("data_access_level"),
+             "requested_integrations": json_text(request.get("requested_integrations")), "vendor_notes(registry)": reg.get("notes") if reg else None,
              "vendor_notes(service)": risk.get("notes") if api_found else None}
     texts.update({f"catalog_notes({m['software_id']})": m.get("notes") for m in matches})
+    texts.update({f"purchase_notes({p.get('purchase_id')})": p.get("notes") for p in (history or {}).get("purchases") or []})
     hits = scan_texts(texts)
     if signals.injection_detected:
         hits.append({"field": "llm_review", "snippet": signals.injection_quote[:160] or "(flagged by model)"})
@@ -392,9 +418,11 @@ def evaluate(request: dict, facts: dict[str, Any], signals: Signals | None = Non
             r.flag("possible_split_purchase", f"open requests {ids} from the same department to the same vendor bring the total to ${total:,.0f}, a higher approval tier")
 
     # ---- Vendor blocked
-    blocked = reg is not None and str(reg.get("procurement_status", "")).casefold() in {"blocked", "rejected", "terminated", "banned"}
+    BLOCKED = {"blocked", "rejected", "terminated", "banned"}
+    candidates = [reg] if reg else ((registry or {}).get("records") or [])
+    blocked = any(str(c.get("procurement_status", "")).casefold() in BLOCKED for c in candidates)
     if blocked:
-        r.flag("vendor_blocked", f"registry procurement status is '{reg.get('procurement_status')}'")
+        r.flag("vendor_blocked", "registry procurement status is blocked/rejected for this vendor name")
 
     # ---- Section 11: human authority + next action precedence (first match wins)
     if r.critical_failure:

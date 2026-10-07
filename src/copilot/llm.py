@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import re
+import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -18,6 +19,7 @@ from src.copilot.config import ROOT, llm_mode, model_name
 
 CACHE_DIR = Path(os.getenv("LLM_CACHE_DIR", str(ROOT / "evals" / "llm_cache")))
 _last_call_at = 0.0
+_rate_lock = threading.Lock()
 
 
 class LLMUnavailable(RuntimeError):
@@ -113,12 +115,13 @@ class GeminiClient:
         min_interval = float(os.getenv("LLM_MIN_INTERVAL_S", "0"))
         last_exc: Exception | None = None
         for attempt in range(6):
-            wait = min_interval - (time.monotonic() - _last_call_at)
-            if wait > 0:
-                time.sleep(wait)
+            with _rate_lock:
+                wait = min_interval - (time.monotonic() - _last_call_at)
+                if wait > 0:
+                    time.sleep(wait)
+                _last_call_at = time.monotonic()
             start = time.perf_counter()
             try:
-                _last_call_at = time.monotonic()
                 response = self._client.models.generate_content(model=self.model, contents=contents, config=config)
                 return response, (time.perf_counter() - start) * 1000
             except Exception as exc:  # google.genai.errors.APIError and network errors

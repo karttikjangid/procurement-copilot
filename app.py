@@ -42,7 +42,8 @@ with st.sidebar:
             integ = st.text_input("Integrations (comma separated, blank = none)", "")
             just = st.text_area("Business justification", "")
             submitted = st.form_submit_button("Use this request")
-        request = {"request_id": "NEW-1", "requester_id": emp, "product_name": product or None, "vendor_name": vendor or None,
+        import hashlib
+        request = {"request_id": "NEW-" + hashlib.sha1(json.dumps([emp, product, vendor, category, cost, users, level, integ, just]).encode()).hexdigest()[:8], "requester_id": emp, "product_name": product or None, "vendor_name": vendor or None,
                    "category": category or None, "annual_cost_usd": cost or None, "user_count": users or None,
                    "business_justification": just or None, "data_access_level": level,
                    "requested_integrations": [x.strip() for x in integ.split(",") if x.strip()], "urgency": "normal"}
@@ -99,22 +100,24 @@ if result:
 
     st.subheader("Human decisions")
     state, decided = approvals.status(request["request_id"], decision.required_approvals)
+    if trace["action"] in approvals.BLOCKING_ACTIONS:
+        state = "On hold: " + ACTION_LABELS[trace["action"]]
     st.markdown(f"Status: **{state}**")
     cols = st.columns(max(1, len(decision.required_approvals)))
     for col, role in zip(cols, decision.required_approvals):
         with col:
             st.markdown(f"**{role}**: {decided.get(role, 'pending')}")
             reason = st.text_input("Reason", key=f"reason-{key}-{role}")
-            own = acting == request.get("requester_id")
+            allowed, why = approvals.can_act(acting, role, request, trace, approvals.deciders(request["request_id"]))
             a, r = st.columns(2)
-            if a.button("Approve", key=f"a-{key}-{role}", disabled=own or not reason):
+            if a.button("Approve", key=f"a-{key}-{role}", disabled=not (allowed and reason)):
                 approvals.log(request["request_id"], acting, role, "approved", reason)
                 st.rerun()
-            if r.button("Reject", key=f"r-{key}-{role}", disabled=not reason):
+            if r.button("Reject", key=f"r-{key}-{role}", disabled=not (allowed and reason)):
                 approvals.log(request["request_id"], acting, role, "rejected", reason)
                 st.rerun()
-            if own:
-                st.caption("Requesters cannot approve their own request.")
+            if not allowed:
+                st.caption(why)
     if trace["action"] in ("REQUEST_CLARIFICATION", "ESCALATE_MANUAL_REVIEW", "DO_NOT_PROCEED"):
         st.warning("Approvals should wait: the recommendation is to resolve the issues above first.")
     with st.expander("Audit log"):

@@ -148,7 +148,7 @@
     },
     "error": null,
     "source": "employees.csv",
-    "latency_ms": 0.1
+    "latency_ms": 0.2
    },
    {
     "call_id": "T2",
@@ -164,6 +164,7 @@
      "annual_software_budget_usd": 90000,
      "committed_usd": 61000,
      "available_usd": 29000.0,
+     "available_valid": true,
      "requested_annual_cost_usd": 500.0,
      "within_available_budget": true,
      "shortfall_usd": 0.0
@@ -307,14 +308,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],
@@ -327,6 +321,6 @@
    "output_tokens": 0,
    "log": []
   },
-  "wall_ms": 2.1
+  "wall_ms": 2.2
  }
 }

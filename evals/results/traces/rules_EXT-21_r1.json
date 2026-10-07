@@ -148,7 +148,7 @@
     },
     "error": null,
     "source": "employees.csv",
-    "latency_ms": 0.2
+    "latency_ms": 0.3
    },
    {
     "call_id": "T2",
@@ -164,6 +164,7 @@
      "annual_software_budget_usd": 90000,
      "committed_usd": 61000,
      "available_usd": 29000.0,
+     "available_valid": true,
      "requested_annual_cost_usd": 500.0,
      "within_available_budget": true,
      "shortfall_usd": 0.0
@@ -191,7 +192,7 @@
     },
     "error": null,
     "source": "software_catalog.csv",
-    "latency_ms": 0.1
+    "latency_ms": 0.2
    },
    {
     "call_id": "T4",
@@ -209,7 +210,7 @@
     },
     "error": null,
     "source": "purchase_history.csv + requests.json",
-    "latency_ms": 0.2
+    "latency_ms": 0.3
    },
    {
     "call_id": "T5",
@@ -252,7 +253,7 @@
     },
     "error": null,
     "source": "GET http://127.0.0.1:8011/EXT-21/none/vendor-risk/QuietNote",
-    "latency_ms": 1.6
+    "latency_ms": 2.3
    },
    {
     "call_id": "T7",
@@ -307,14 +308,7 @@
     "latency_ms": 0.0
    }
   ],
-  "agent_defects": [
-   "agent skipped lookup_requester",
-   "agent skipped check_budget",
-   "agent skipped search_catalog",
-   "agent skipped get_purchase_history",
-   "agent skipped get_vendor_registry",
-   "agent skipped get_vendor_risk"
-  ],
+  "agent_defects": [],
   "overrides": [],
   "grounded_claims": [],
   "ungrounded_claims": [],
@@ -327,6 +321,6 @@
    "output_tokens": 0,
    "log": []
   },
-  "wall_ms": 2.7
+  "wall_ms": 3.8
  }
 }
