@@ -2,6 +2,7 @@
 evaluation data can override it through environment variables."""
 from __future__ import annotations
 
+import contextvars
 import os
 import re
 from datetime import date
@@ -9,9 +10,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
+# Per-thread overrides used by the evaluation harness (each case gets its own data
+# directory and vendor-risk endpoint while cases run in parallel).
+OVERRIDES: contextvars.ContextVar[dict] = contextvars.ContextVar("copilot_overrides", default={})
+
+
+def _get(name: str, default: str) -> str:
+    return OVERRIDES.get().get(name) or os.getenv(name, default)
+
 
 def data_dir() -> Path:
-    return Path(os.getenv("DATA_DIR", str(ROOT / "data")))
+    return Path(_get("DATA_DIR", str(ROOT / "data")))
 
 
 def reference_date() -> date:
@@ -20,7 +29,7 @@ def reference_date() -> date:
     Order: REFERENCE_DATE env var, then the date written in procurement_policy.md,
     then data/README.md. Fails loudly if none is found instead of guessing.
     """
-    override = os.getenv("REFERENCE_DATE")
+    override = _get("REFERENCE_DATE", "")
     if override:
         return date.fromisoformat(override.strip())
     pattern = re.compile(r"reference date[^0-9]{0,40}(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
@@ -34,7 +43,7 @@ def reference_date() -> date:
 
 
 def vendor_risk_base_url() -> str:
-    return os.getenv("VENDOR_RISK_BASE_URL", "http://127.0.0.1:8001").rstrip("/")
+    return _get("VENDOR_RISK_BASE_URL", "http://127.0.0.1:8001").rstrip("/")
 
 
 def model_name() -> str:

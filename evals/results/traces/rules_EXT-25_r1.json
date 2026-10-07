@@ -1,0 +1,440 @@
+{
+ "decision": {
+  "request_id": "X-25",
+  "recommendation": "Route to manual review: vendor evidence is unavailable or conflicting (Department Head, Procurement, Finance, CFO, Security, Legal). Deterministic checks completed; see evidence and required approvals.",
+  "evidence": [
+   {
+    "source": "lookup_requester",
+    "finding": "Requester Arjun Mehta (E002), Engineering; manager Maya Rao; department head for routing Maya Rao (Director/VP in the same department)",
+    "reference": "employees.csv:E002 (T1)"
+   },
+   {
+    "source": "check_budget",
+    "finding": "Engineering available software budget $26,000 (annual $300,000, committed $274,000); requested $30,000 exceeds it",
+    "reference": "department_budgets.csv:Engineering (T2)"
+   },
+   {
+    "source": "search_catalog",
+    "finding": "Existing CodeMate by CodeMate (same_category): status Approved, 120 seats, scope Engineering, $90,000/yr; AI coding assistant",
+    "reference": "software_catalog.csv:SW008 (T3)"
+   },
+   {
+    "source": "get_vendor_registry",
+    "finding": "Registry: procurement New, security Unknown (review none), legal terms Unknown; note: Vendor assessment service may be unavailable",
+    "reference": "vendors.csv:V013 (T5)"
+   },
+   {
+    "source": "get_vendor_risk",
+    "finding": "NOT VERIFIED: vendor-risk service unavailable after 3 attempts (HTTP 503: {\"detail\":\"Upstream vendor assessment provider is temporarily unavailable.\"})",
+    "reference": "GET http://127.0.0.1:8011/EXT-25/none/vendor-risk/NimbusAI (T6)"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Annual amount $30,000.00 falls in tier 'above $25,000': minimum approvals Department Head, Finance, CFO, Procurement",
+    "reference": "Policy 4"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Existing catalog options to review first: CodeMate (same_category, 120 seats, Engineering)",
+    "reference": "Policy 3"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Vendor-risk status could NOT be verified; no favourable status was assumed",
+    "reference": "Policy 10"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Vendor security assessment: registry=unknown, service=unavailable; current=False (reference date 2026-09-30, valid 365 days)",
+    "reference": "Policy 5"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "AI tool: an existing approval does not extend to new data classes or use cases",
+    "reference": "Policy 8"
+   }
+  ],
+  "required_approvals": [
+   "Department Head",
+   "Procurement",
+   "Finance",
+   "CFO",
+   "Security",
+   "Legal"
+  ],
+  "missing_information": [],
+  "risk_flags": [
+   "budget_insufficient",
+   "existing_tool_overlap",
+   "vendor_risk_unavailable",
+   "security_review_required",
+   "legal_review_required"
+  ],
+  "next_step": "Security to verify the vendor's status manually (vendor-risk service could not be reached: vendor-risk service unavailable after 3 attempts (HTTP 503: {\"detail\":\"Upstream vendor assessment provider is temporarily unavailable.\"})). Then send the evidence pack to: Department Head, Procurement, Finance, CFO, Security, Legal.",
+  "human_review_required": true,
+  "telemetry": {
+   "llm_calls": 0,
+   "tool_calls": 7,
+   "tool_names": [
+    "lookup_requester",
+    "check_budget",
+    "search_catalog",
+    "get_purchase_history",
+    "get_vendor_registry",
+    "get_vendor_risk",
+    "evaluate_policy"
+   ]
+  }
+ },
+ "trace": {
+  "request_id": "X-25",
+  "architecture": "rules",
+  "errors": [],
+  "action": "VERIFY_EVIDENCE_FIRST",
+  "policy": {
+   "action": "VERIFY_EVIDENCE_FIRST",
+   "action_label": "Route to manual review: vendor evidence is unavailable or conflicting",
+   "approvals": {
+    "Department Head": [
+     "annual amount $30,000.00 is in tier 'above $25,000'"
+    ],
+    "Procurement": [
+     "annual amount $30,000.00 is in tier 'above $25,000'"
+    ],
+    "Finance": [
+     "annual amount $30,000.00 is in tier 'above $25,000'",
+     "budget exception: cost exceeds available department budget"
+    ],
+    "CFO": [
+     "annual amount $30,000.00 is in tier 'above $25,000'"
+    ],
+    "Security": [
+     "vendor security status could not be verified (tool unavailable)",
+     "vendor security assessment missing or not completed"
+    ],
+    "Legal": [
+     "new vendor with annual spend $30,000 (>= $10,000)",
+     "legal terms not approved (status: Unknown)"
+    ]
+   },
+   "flags": {
+    "budget_insufficient": [
+     "cost $30,000 exceeds available $26,000 (shortfall $4,000)"
+    ],
+    "existing_tool_overlap": [
+     "catalog already has: CodeMate (same_category, 120 seats, Engineering)"
+    ],
+    "vendor_risk_unavailable": [
+     "vendor-risk service could not be reached: vendor-risk service unavailable after 3 attempts (HTTP 503: {\"detail\":\"Upstream vendor assessment provider is temporarily unavailable.\"})"
+    ],
+    "security_review_required": [
+     "vendor security status could not be verified (tool unavailable); vendor security assessment missing or not completed"
+    ],
+    "legal_review_required": [
+     "new vendor with annual spend $30,000 (>= $10,000); legal terms not approved (status: Unknown)"
+    ]
+   },
+   "missing_information": [],
+   "data_classes": [],
+   "data_level_unknown": false,
+   "vendor_assessment": {
+    "registry_state": "unknown",
+    "registry_review_date": null,
+    "registry_review_age_days": null,
+    "api_state": "unavailable",
+    "api_review_date": null,
+    "api_review_age_days": null,
+    "reference_date": "2026-09-30",
+    "valid_days": 365
+   },
+   "annual_cost_usd": 30000.0,
+   "findings": [
+    {
+     "finding": "Annual amount $30,000.00 falls in tier 'above $25,000': minimum approvals Department Head, Finance, CFO, Procurement",
+     "reference": "Policy 4"
+    },
+    {
+     "finding": "Existing catalog options to review first: CodeMate (same_category, 120 seats, Engineering)",
+     "reference": "Policy 3"
+    },
+    {
+     "finding": "Vendor-risk status could NOT be verified; no favourable status was assumed",
+     "reference": "Policy 10"
+    },
+    {
+     "finding": "Vendor security assessment: registry=unknown, service=unavailable; current=False (reference date 2026-09-30, valid 365 days)",
+     "reference": "Policy 5"
+    },
+    {
+     "finding": "AI tool: an existing approval does not extend to new data classes or use cases",
+     "reference": "Policy 8"
+    }
+   ],
+   "critical_failure": null
+  },
+  "signals": {
+   "extra_data_classes": [],
+   "injection_detected": false,
+   "injection_quote": "",
+   "business_purpose_clear": null,
+   "overlap_gap_credible": null
+  },
+  "llm_raw": {},
+  "llm_ok": false,
+  "tool_calls": [
+   {
+    "call_id": "T1",
+    "tool": "lookup_requester",
+    "args": {
+     "employee_id": "E002"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "employee_id": "E002",
+     "name": "Arjun Mehta",
+     "department": "Engineering",
+     "level": "IC5",
+     "country": "India",
+     "manager": {
+      "employee_id": "E008",
+      "name": "Maya Rao",
+      "level": "Director"
+     },
+     "department_head": {
+      "employee_id": "E008",
+      "name": "Maya Rao",
+      "department": "Engineering",
+      "basis": "Director/VP in the same department"
+     }
+    },
+    "error": null,
+    "source": "employees.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T2",
+    "tool": "check_budget",
+    "args": {
+     "department": "Engineering",
+     "annual_cost_usd": 30000
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "department": "Engineering",
+     "annual_software_budget_usd": 300000,
+     "committed_usd": 274000,
+     "available_usd": 26000.0,
+     "requested_annual_cost_usd": 30000.0,
+     "within_available_budget": false,
+     "shortfall_usd": 4000.0
+    },
+    "error": null,
+    "source": "department_budgets.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T3",
+    "tool": "search_catalog",
+    "args": {
+     "product_name": "NimbusAI Code Search",
+     "vendor_name": "NimbusAI",
+     "category": "Developer AI"
+    },
+    "ok": true,
+    "data": {
+     "query": {
+      "product_name": "NimbusAI Code Search",
+      "vendor_name": "NimbusAI",
+      "category": "Developer AI"
+     },
+     "matches": [
+      {
+       "software_id": "SW008",
+       "product_name": "CodeMate",
+       "category": "Developer AI",
+       "vendor_name": "CodeMate",
+       "status": "Approved",
+       "annual_cost_usd": "90000",
+       "licensed_seats": "120",
+       "scope": "Engineering",
+       "notes": "AI coding assistant",
+       "match_reasons": [
+        "same_category"
+       ]
+      }
+     ]
+    },
+    "error": null,
+    "source": "software_catalog.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T4",
+    "tool": "get_purchase_history",
+    "args": {
+     "department": "Engineering",
+     "vendor_name": "NimbusAI",
+     "request_id": "X-25"
+    },
+    "ok": true,
+    "data": {
+     "reference_date": "2026-09-30",
+     "purchases": [],
+     "open_requests_same_department_vendor": []
+    },
+    "error": null,
+    "source": "purchase_history.csv + requests.json",
+    "latency_ms": 0.2
+   },
+   {
+    "call_id": "T5",
+    "tool": "get_vendor_registry",
+    "args": {
+     "vendor_name": "NimbusAI"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "ambiguous": false,
+     "vendor_id": "V013",
+     "vendor_name": "NimbusAI",
+     "procurement_status": "New",
+     "security_status": "Unknown",
+     "security_review_date": "",
+     "legal_terms_status": "Unknown",
+     "notes": "Vendor assessment service may be unavailable"
+    },
+    "error": null,
+    "source": "vendors.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T6",
+    "tool": "get_vendor_risk",
+    "args": {
+     "vendor_name": "NimbusAI"
+    },
+    "ok": false,
+    "data": null,
+    "error": "vendor-risk service unavailable after 3 attempts (HTTP 503: {\"detail\":\"Upstream vendor assessment provider is temporarily unavailable.\"})",
+    "source": "GET http://127.0.0.1:8011/EXT-25/none/vendor-risk/NimbusAI",
+    "latency_ms": 616.9
+   },
+   {
+    "call_id": "T7",
+    "tool": "evaluate_policy",
+    "args": {
+     "signals": "final"
+    },
+    "ok": true,
+    "data": {
+     "action": "VERIFY_EVIDENCE_FIRST",
+     "action_label": "Route to manual review: vendor evidence is unavailable or conflicting",
+     "approvals": {
+      "Department Head": [
+       "annual amount $30,000.00 is in tier 'above $25,000'"
+      ],
+      "Procurement": [
+       "annual amount $30,000.00 is in tier 'above $25,000'"
+      ],
+      "Finance": [
+       "annual amount $30,000.00 is in tier 'above $25,000'",
+       "budget exception: cost exceeds available department budget"
+      ],
+      "CFO": [
+       "annual amount $30,000.00 is in tier 'above $25,000'"
+      ],
+      "Security": [
+       "vendor security status could not be verified (tool unavailable)",
+       "vendor security assessment missing or not completed"
+      ],
+      "Legal": [
+       "new vendor with annual spend $30,000 (>= $10,000)",
+       "legal terms not approved (status: Unknown)"
+      ]
+     },
+     "flags": {
+      "budget_insufficient": [
+       "cost $30,000 exceeds available $26,000 (shortfall $4,000)"
+      ],
+      "existing_tool_overlap": [
+       "catalog already has: CodeMate (same_category, 120 seats, Engineering)"
+      ],
+      "vendor_risk_unavailable": [
+       "vendor-risk service could not be reached: vendor-risk service unavailable after 3 attempts (HTTP 503: {\"detail\":\"Upstream vendor assessment provider is temporarily unavailable.\"})"
+      ],
+      "security_review_required": [
+       "vendor security status could not be verified (tool unavailable); vendor security assessment missing or not completed"
+      ],
+      "legal_review_required": [
+       "new vendor with annual spend $30,000 (>= $10,000); legal terms not approved (status: Unknown)"
+      ]
+     },
+     "missing_information": [],
+     "data_classes": [],
+     "data_level_unknown": false,
+     "vendor_assessment": {
+      "registry_state": "unknown",
+      "registry_review_date": null,
+      "registry_review_age_days": null,
+      "api_state": "unavailable",
+      "api_review_date": null,
+      "api_review_age_days": null,
+      "reference_date": "2026-09-30",
+      "valid_days": 365
+     },
+     "annual_cost_usd": 30000.0,
+     "findings": [
+      {
+       "finding": "Annual amount $30,000.00 falls in tier 'above $25,000': minimum approvals Department Head, Finance, CFO, Procurement",
+       "reference": "Policy 4"
+      },
+      {
+       "finding": "Existing catalog options to review first: CodeMate (same_category, 120 seats, Engineering)",
+       "reference": "Policy 3"
+      },
+      {
+       "finding": "Vendor-risk status could NOT be verified; no favourable status was assumed",
+       "reference": "Policy 10"
+      },
+      {
+       "finding": "Vendor security assessment: registry=unknown, service=unavailable; current=False (reference date 2026-09-30, valid 365 days)",
+       "reference": "Policy 5"
+      },
+      {
+       "finding": "AI tool: an existing approval does not extend to new data classes or use cases",
+       "reference": "Policy 8"
+      }
+     ],
+     "critical_failure": null
+    },
+    "error": null,
+    "source": "src/copilot/policy.py",
+    "latency_ms": 0.0
+   }
+  ],
+  "agent_defects": [
+   "agent skipped lookup_requester",
+   "agent skipped check_budget",
+   "agent skipped search_catalog",
+   "agent skipped get_purchase_history",
+   "agent skipped get_vendor_registry",
+   "agent skipped get_vendor_risk"
+  ],
+  "overrides": [],
+  "grounded_claims": [],
+  "ungrounded_claims": [],
+  "questions_for_requester": [],
+  "llm": {
+   "calls": 0,
+   "cache_hits": 0,
+   "latency_ms": 0.0,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "log": []
+  },
+  "wall_ms": 618.4
+ }
+}

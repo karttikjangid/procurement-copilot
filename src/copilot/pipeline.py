@@ -238,6 +238,8 @@ def run_copilot(request: dict, architecture: str = "single") -> tuple[Procuremen
 
     # ---------------- guardrail
     defects = ensure_evidence(request, tb)
+    if architecture != "single":
+        defects = []  # staged/rules gather evidence in code, so there is no agent to grade
     final_raw = raw.get("final")
     signals = signals_from(final_raw)
     policy = evaluate(request, facts_from_calls(tb.calls), signals)

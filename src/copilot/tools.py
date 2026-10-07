@@ -199,7 +199,9 @@ VENDOR_RISK_FIELDS = {"security_review_status", "last_review_date", "processes_p
 def get_vendor_risk(vendor_name: str, retries: int = 2, timeout_seconds: float = 3.0):
     """Mock vendor-risk API with retry. 404 = no record (valid answer), 5xx/timeout/
     malformed JSON = unavailable. Never returns a favourable default."""
-    url = f"{vendor_risk_base_url()}/vendor-risk/{quote(str(vendor_name or ''), safe='')}"
+    # Resolve spelling variants ("signflow inc.") to the registry's canonical name first.
+    canonical = next((r["vendor_name"] for r in data.vendors() if data.norm_name(r["vendor_name"]) == data.norm_name(vendor_name)), vendor_name)
+    url = f"{vendor_risk_base_url()}/vendor-risk/{quote(str(canonical or ''), safe='')}"
     last_error = "unknown error"
     for attempt in range(retries + 1):
         try:

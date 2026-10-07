@@ -216,6 +216,7 @@ def evaluate(request: dict, facts: dict[str, Any], signals: Signals | None = Non
     if not requester or not requester.get("found"):
         r.missing.append(REQUIRED_FIELDS[0][1])
         r.critical_failure = "requester could not be verified in employees.csv"
+        r.flag("requester_unverified", f"requester id '{request.get('requester_id')}' not found")
     for key, message in REQUIRED_FIELDS[1:]:
         value = request.get(key)
         if key == "requested_integrations":

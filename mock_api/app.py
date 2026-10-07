@@ -2,12 +2,20 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from urllib.parse import unquote
+import os
 
 from fastapi import FastAPI, HTTPException
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = json.loads((ROOT / "data" / "vendor_risk.json").read_text(encoding="utf-8"))
+
+
+def _load() -> dict:
+    # Read on each request so a swapped DATA_DIR is honoured without a restart.
+    data_dir = Path(os.getenv("DATA_DIR", str(ROOT / "data")))
+    return json.loads((data_dir / "vendor_risk.json").read_text(encoding="utf-8"))
+
+
+DATA = _load()  # kept for backwards compatibility with code that imports it
 
 app = FastAPI(title="FDE Mock Vendor Risk API", version="1.0")
 
@@ -19,8 +27,10 @@ def health() -> dict:
 
 @app.get("/vendor-risk/{vendor_name}")
 def vendor_risk(vendor_name: str) -> dict:
-    name = unquote(vendor_name)
-    record = DATA.get(name)
+    # FastAPI already URL-decodes path parameters; decoding again (the starter's
+    # unquote) corrupted names containing '%'.
+    name = vendor_name
+    record = _load().get(name)
     if record is None:
         raise HTTPException(status_code=404, detail=f"No vendor-risk record for '{name}'")
     if record.get("force_error"):
