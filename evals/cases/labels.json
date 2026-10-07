@@ -630,17 +630,16 @@
  },
  "EXT-24": {
   "actions": [
-   "REQUEST_CLARIFICATION"
+   "REQUEST_CLARIFICATION",
+   "ROUTE_FOR_APPROVAL"
   ],
   "flags_required": [
-   "missing_information"
+   "security_review_required"
   ],
   "flags_forbidden": [],
-  "missing_tokens": [
-   "data"
-  ],
+  "missing_tokens": [],
   "evidence_contains": [],
-  "note": "",
+  "note": "unrecognised label 'board_minutes': clarify, or read as confidential documents and route with Security (blind labeller: ambiguous)",
   "approvals_include": [
    "Security"
   ]
