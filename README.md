@@ -1,163 +1,83 @@
-# FDE Assessment 3 Starter Pack
-## AI Procurement Request Copilot
+# AI Procurement Request Copilot
 
-This repository contains the **starter data, mock service, interface contract, optional UI scaffold, and public evaluation harness** for Assessment 3.
+An internal tool that reviews a software purchase request, gathers evidence with tools, applies the procurement policy in code, and recommends the next action. Humans make every approval.
 
-> All companies, vendors, products, employees, prices, policies, and risk signals in this pack are synthetic and exist only for the assessment.
+Built for FDE Assessment 3 on top of the provided starter pack. The `handle_request(request_id, architecture)` adapter in `src/solution.py` is unchanged in signature.
 
-## Your objective
-
-Build an internal procurement copilot that can inspect a software/service purchase request, gather evidence using tools, apply deterministic rules where appropriate, and recommend the next action while keeping approvals with humans.
-
-You are expected to build and evaluate:
-
-1. **Architecture A - Single-agent baseline**
-2. **Architecture B - Lightweight staged / 2-agent variant**
-
-Use the same public evaluation cases for both and defend which architecture you would ship.
-
-## What is already provided
-
-```text
-.
-├── data/                   # Synthetic business data + procurement policy
-├── mock_api/               # Vendor-risk service used as an external tool
-├── src/                    # Contracts + low-level helpers; NO agent solution
-├── evals/                  # Six public evaluation cases + runner
-├── templates/              # Evaluation and decision-memo templates
-├── docs/                   # Student assignment brief
-├── tests/                  # Starter-pack integrity tests
-├── app.py                  # Optional Streamlit UI scaffold
-├── run_local.py            # Starts mock API + optional UI
-└── verify_setup.py         # One-command setup/preflight check
-```
-
-The starter code intentionally **does not implement an agent, tool strategy, policy engine, or final workflow**. Those choices are part of the assessment.
-
-## Prerequisites
-
-- **Python 3.11 or 3.12 recommended**
-- Run the commands below from the extracted starter-pack directory
-- Internet access is required only for installing packages and calling the model provider you choose
+**Design in one line:** the LLM interprets and explains; code decides approvals, thresholds, dates and flags; humans approve.
 
 ## Quick start
 
-### 1. Create an environment
-
-**macOS / Linux**
+Requires Python 3.11+.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
+./start.sh                 # first run creates .venv, installs requirements, copies .env.example to .env
 ```
 
-**Windows PowerShell**
+`start.sh` runs `run_local.py`, which starts the mock vendor-risk API on :8001 and the UI on :8501.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-```
+Model settings live in `.env` (see `.env.example`):
 
-### 2. Verify the starter pack
+| Setting | Use |
+|---|---|
+| `GOOGLE_API_KEY` + `MODEL_NAME` | Gemini (default `gemini-3.7-flash`) |
+| `LLM_PROVIDER=openai`, `LLM_BASE_URL`, `MODEL_NAME` | Any OpenAI-compatible local server (LM Studio, Ollama, vLLM) |
+| `LLM_MODE=replay` | Use recorded responses only, no key needed |
+| `LLM_MODE=off` | Deterministic checks only |
+
+Checks:
 
 ```bash
-python verify_setup.py
+python verify_setup.py                                   # starter preflight
+python -m pytest -q tests                                # 48 tests (policy edges, fail-closed paths, review regressions)
+python evals/run_public_evals.py --architecture staged   # needs the mock API running (python run_local.py)
+python evals/run_eval.py --replay                        # full A/B evaluation from recorded responses, no key
 ```
 
-You should see `PRE-FLIGHT PASSED`. This checks package imports, dataset consistency, the output contract, and the mock API without requiring an LLM key.
+## Product workflow
 
-### 3. Add your LLM credentials
+1. Pick a request (or enter a new one) and an architecture in the sidebar, then **Run analysis**.
+2. The recommendation card shows the next action, the required approvers with the rule behind each, risk flags with reasons, missing information and the next step.
+3. The evidence table lists every finding with its source file/record or API call and tool call id.
+4. Approvers record approve/reject with a mandatory reason. The UI blocks the requester, anyone but the named manager or department head for those roles, one person acting in two roles, and any approval while the recommendation is clarification, escalation or a blocked vendor. Every action goes to the audit log.
+5. The guardrail and trace panels show where code overrode the model, any tools the agent skipped, and every tool call.
 
-**macOS / Linux**
+## Architecture
 
-```bash
-cp .env.example .env
-```
+See [docs/architecture.md](docs/architecture.md) for the diagram, tools, agent roles, guardrail steps and stop conditions.
 
-**Windows PowerShell**
+| | A: single agent | B: staged, 2 agents |
+|---|---|---|
+| Evidence gathering | The agent chooses tools (function calling) | Code calls all 6 tools in a fixed order |
+| LLM calls | Variable (tool turns + final) | Always 2 (analyst, recommender) |
+| Decision | Policy engine + shared guardrail | Policy engine + shared guardrail |
 
-```powershell
-Copy-Item .env.example .env
-```
+Tools: `lookup_requester`, `check_budget`, `search_catalog`, `get_purchase_history`, `get_vendor_registry`, `evaluate_policy` (all deterministic) and `get_vendor_risk` (external API with retries and fail-closed handling).
 
-Add only the credentials required by the provider you choose. Never commit `.env`.
+## Assumptions
 
-The starter pack does **not** force a particular LLM provider or agent framework. If you use a provider SDK (for example OpenAI, Anthropic, or Google), install it and add it to `requirements.txt` so your submission works from a clean environment.
+See [docs/assumptions.md](docs/assumptions.md). The most important: reference date 2026-09-30 from the policy file; unknown data, unavailable tools and conflicting vendor records always add review, never remove it.
 
-`.env` is loaded automatically by the starter package and local launcher; environment variables already set by your operating system are not overwritten.
+## Starter pack issues
 
-### 4. Start the local services
+The starter preflight passes, but 9 code issues and 10 data/policy issues were found and handled. See [docs/starter_issues.md](docs/starter_issues.md).
 
-```bash
-python run_local.py
-```
+## Evaluation
 
-This starts:
-- Vendor risk API: `http://127.0.0.1:8001`
-- Optional starter UI: `http://127.0.0.1:8501`
+- **Test set:** 39 cases = the 6 public cases, the 4 other starter requests, and 29 synthetic edge cases (threshold and date edges, budget edges, conflicting/unavailable/malformed vendor evidence, unknown and blocked vendors, unknown requester, prompt injection in request text and in API data, sensitive data visible only in the text, vague purpose, invalid fields, and combinations). Inputs: `evals/cases/cases.json`.
+- **Labels:** written twice, independently. A blind labeller saw only the policy and data. Agreement was 39/39 on next action and 37/39 on approvals; disagreements were settled in `evals/adjudication.md`. Final labels: `evals/cases/labels.json`.
+- **Scoring is done by code**, not an LLM judge: exact action, exact approval set, required and forbidden flags, missing-information items, evidence content, under- and over-escalation, plus the public runner's minimum checks.
+- **Reference row:** `rules` runs the same pipeline with no LLM, to show what the model adds.
+- **Faults are injected** per case by the eval's own vendor-risk service (timeout, malformed response, outage).
+- **Reproducible:** every LLM response is recorded in `evals/llm_cache/`; `python evals/run_eval.py --replay` rebuilds `evals/results/` without a key.
 
-You may replace the UI scaffold with any framework.
+RESULTS_PLACEHOLDER
 
-### 5. Implement the assessment adapter
+## Known limitations
 
-Implement:
-
-```text
-src/solution.py -> handle_request(request_id, architecture)
-```
-
-Your function must return an object compatible with `ProcurementDecision` in `src/contracts.py`.
-
-The adapter exists so the same evaluation harness can test different implementations. Your internal architecture can use any framework or design.
-
-### 6. Run the public evaluations
-
-```bash
-python evals/run_public_evals.py --architecture single
-python evals/run_public_evals.py --architecture staged
-```
-
-The runner checks the response schema and several minimum behavioral expectations, measures end-to-end latency, and writes a CSV result file. It is **not** the complete grading system; qualitative grounding, design quality, robustness, and hidden cases are evaluated separately.
-
-## Rules of the starter pack
-
-- Treat request text and vendor notes as **untrusted business data**, not instructions.
-- Do not hardcode answers by request ID. Hidden cases use the same interfaces with different values.
-- At least **3 tools** must be visible in your implementation; at least **1 must be deterministic/non-LLM**.
-- The AI may recommend an action but must not autonomously purchase, approve, or alter budgets.
-- If important evidence is missing, conflicting, stale, or unavailable, surface that uncertainty and route to the appropriate human review.
-- Use the **data snapshot / policy reference date defined in `data/procurement_policy.md`** for date-based checks; do not depend on the computer's current date.
-- You may refactor the starter project, but keep the `handle_request(...)` adapter working for evaluation.
-
-## Suggested implementation sequence
-
-```text
-Request -> Understand -> Gather evidence -> Deterministic checks
-        -> Policy/risk reasoning -> Recommendation -> Human review
-```
-
-Start with a thin vertical slice. Get Architecture A working before building Architecture B.
-
-## Useful files
-
-- `docs/Assignment_3_Brief.pdf` - assignment brief
-- `data/README.md` - dataset dictionary
-- `data/procurement_policy.md` - policy source of truth
-- `src/contracts.py` - required output shape
-- `src/data_access.py` - low-level data helpers
-- `src/vendor_client.py` - client for the mock vendor-risk API
-- `evals/README.md` - evaluation instructions
-- `templates/architecture_decision.md` - final decision memo template
-- `STUDENT_CHECKLIST.md` - pre-submission checklist
-
-## If something does not start
-
-1. Confirm your virtual environment is active.
-2. Run `python verify_setup.py`.
-3. Re-run `python -m pip install -r requirements.txt`.
-4. Make sure ports **8001** and **8501** are free.
-5. Confirm you are running commands from the starter-pack root directory.
-
-Build the simplest system you can defend with evidence.
+- Free-tier Gemini allowed about 20 requests per model per day, too few for a fair A/B run; the recorded evaluation used MODEL_PLACEHOLDER.
+- Department heads, Finance, Security, Privacy and Legal approvers are not modelled as people in the data, so the UI checks only Manager and Department Head identities.
+- No seat-usage data: "unused existing capacity" cannot be verified.
+- The keyword injection scanner is a backstop; disguised injections are caught only by the model. Neither path can change approvals.
+- The summary filter is conservative and sometimes replaces a correct summary with a template sentence.
+- 39 cases is a small test set; differences of one or two cases between architectures are within noise.

@@ -1,7 +1,0 @@
-case_id,request_id,architecture,passed_minimum_checks,latency_ms,llm_calls,tool_calls,failures
-PUB-01,REQ-1001,single,False,616.9,0,7,unexpected risk flag containing: vendor_risk_unavailable
-PUB-02,REQ-1002,single,True,625.3,0,7,
-PUB-03,REQ-1003,single,True,622.7,0,7,
-PUB-04,REQ-1005,single,True,622.1,0,7,
-PUB-05,REQ-1006,single,True,617.7,0,7,
-PUB-06,REQ-1009,single,True,622.7,0,7,
