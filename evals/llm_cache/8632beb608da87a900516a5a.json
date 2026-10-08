@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 51788.5,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos at $500/year for 5 users. The vendor QuietNote is approved with current security and legal status (reviewed 2026-05-01, within 365-day validity). However, the requester (E999) and department could not be verified, preventing budget validation and approval routing.\", \"proposed_action\": \"ESCALATE_MANUAL_REVIEW\", \"proposed_approvals\": [], \"proposed_risk_flags\": [\"requester_unverified\", \"missing_information\", \"critical_failure\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester E999 not found in employees.csv\", \"source\": \"lookup_requester\"}, {\"call_id\": \"T2\", \"finding\": \"Department could not be determined from department_budgets.csv\", \"source\": \"check_budget\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote is approved with security status approved_current (reviewed 2026-05-01, within 365 days)\", \"source\": \"get_vendor_registry\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows low risk, security approved, no personal data processing\", \"source\": \"get_vendor_risk\"}], \"questions_for_requester\": [\"Please provide your verified employee ID and department name so we can validate the budget allocation.\", \"Please confirm the annual cost estimate of $500 for 5 users is accurate and within your department's available software budget.\"]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 343,
+   "prompt_token_count": 2910
+  }
+ }
+}

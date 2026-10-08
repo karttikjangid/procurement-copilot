@@ -1,0 +1,54 @@
+{
+ "label": "single.turn1",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 68307.2,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "employee_id": "E001"
+        },
+        "name": "lookup_requester"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "product_name": "NeuralDesk Team Workspace",
+         "vendor_name": "NeuralDesk",
+         "category": "General AI"
+        },
+        "name": "search_catalog"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "vendor_name": "NeuralDesk"
+        },
+        "name": "get_vendor_registry"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "vendor_name": "NeuralDesk"
+        },
+        "name": "get_vendor_risk"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 519,
+   "prompt_token_count": 2561
+  }
+ }
+}

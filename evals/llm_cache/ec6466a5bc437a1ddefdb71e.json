@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 85588.0,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for a one-time annual training package from SignFlow for 12 Finance users at $950. The requester is Noah Williams in the Finance department, and the annual cost is well within the Finance department's available software budget of $29,000. SignFlow is an approved vendor with current security and legal status (reviewed 2026-06-20, valid for 365 days). However, the catalog search found an existing company-wide SignFlow E-signature license (SW010) for $16,000 with 45 seats, purchased in July 2026. The request is for a different product (Training Pack) from the same vendor, but the existing license may already cover the training needs or the vendor relationship. This requires manual review to confirm the training is not covered by the existing agreement and to verify the need for a separate purchase.\", \"proposed_action\": \"REVIEW_EXISTING_TOOL_FIRST\", \"proposed_approvals\": [\"Manager\"], \"proposed_risk_flags\": [\"existing_tool_overlap\", \"possible_split_purchase\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester is Noah Williams in the Finance department, with manager Priya Shah (Director).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Finance department has $29,000 available software budget; requested cost is $950, which is within budget.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"Catalog search found existing SignFlow product (SW010) with 45 seats, company-wide scope, purchased July 2026.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"Purchase history shows existing SignFlow agreement (PO-2513) for $16,000, company-wide, purchased July 2026. Open request REQ-1001 from same department to same vendor for $800.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor registry shows SignFlow is approved with security and legal terms approved as of 2026-06-20.\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows SignFlow is low risk, security approved, last reviewed 2026-06-20.\", \"source\": \"GET http://127.0.0.1:8012/BASE-10/none/vendor-risk/SignFlow\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine recommends REVIEW_EXISTING_TOOL_FIRST due to existing tool overlap and possible split purchase.\", \"source\": \"Policy engine result\"}]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 617,
+   "prompt_token_count": 3540
+  }
+ }
+}

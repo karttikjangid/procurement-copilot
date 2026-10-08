@@ -71,13 +71,41 @@ The starter preflight passes, but 9 code issues and 10 data/policy issues were f
 - **Faults are injected** per case by the eval's own vendor-risk service (timeout, malformed response, outage).
 - **Reproducible:** every LLM response is recorded in `evals/llm_cache/`; `python evals/run_eval.py --replay` rebuilds `evals/results/` without a key.
 
-RESULTS_PLACEHOLDER
+### Results
+
+Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (thinking off, temperature 0, one repeat). Free-tier Gemini allowed about 20 requests per model per day, too few for this comparison. Local inference took 2 to 20 minutes per case, so A finished 9 cases and B 28 before the deadline; A and B are compared only on cases both finished. Full tables and every failure: [evals/results/FINAL_RESULTS.md](evals/results/FINAL_RESULTS.md).
+
+**A vs B on the 9 matched cases (the starter's REQ-1001 to REQ-1009, including all 6 public cases):**
+
+| Metric | rules (no LLM) | A: single | B: staged |
+|---|---:|---:|---:|
+| Cases fully passing | 8/9 | 7/9 | 7/9 |
+| Public minimum checks | 6/6 | 5/6 | 6/6 |
+| Missed required review | 0 | 0 | 0 |
+| Extra reviewer added | 0 | 0 | 1 |
+| Avg LLM calls | 0 | 5.0 | 2.0 |
+| Avg latency per case | 0.1 s | 467 s | 149 s |
+| Agent skipped a tool (re-run by guardrail) | - | 1 | - |
+| LLM evidence claims grounded in tool output | - | 95% | 97% |
+| Guardrail overrode the model's approvals/action | - | 33% | 56% |
+
+**B vs the deterministic reference on 28 cases:** missed required reviews fell from 2 cases (7%) to 0; extra reviewers rose from 0 to 2 cases (7%). The model caught customer PII and production access that appeared only in the justification text (EXT-15, EXT-16) and the TaskFlow overlap with no stated gap (BASE-08). The deterministic reference alone passes 34/39 (87%) of all cases and fails exactly the cases that need judgment.
+
+**What went wrong (all in the safe direction):** B's analyst sometimes listed every sensitive data class (extra Security/Privacy review on BASE-07, EXT-04) and once judged a stated gap as not credible (BASE-02); A twice marked a clear purpose as unclear (BASE-01, BASE-07). No run missed a review the policy requires.
+
+**Reproduce:** `python evals/summarize.py` rebuilds every table from the saved traces. `LLM_PROVIDER=openai MODEL_NAME=qwen/qwen3.5-9b python evals/run_eval.py --replay --archs staged --port 8012 --out results_replay` re-runs B from recorded responses with no model (A: `--archs single --port 8011`). The port is part of the recorded tool output, so it must match.
+
+## Architecture decision
+
+**Ship B (staged).** Same accuracy as A on the matched cases, 2.5 times fewer LLM calls, about 3 times lower latency, fixed cost per request, and evidence gathering that cannot skip a check because it is plain code. The model is only asked the judgment questions the rules cannot answer. Memo (under 500 words): [docs/decision_memo.md](docs/decision_memo.md).
 
 ## Known limitations
 
-- Free-tier Gemini allowed about 20 requests per model per day, too few for a fair A/B run; the recorded evaluation used MODEL_PLACEHOLDER.
+- Free-tier Gemini allowed about 20 requests per model per day, too few for a fair A/B run; the recorded evaluation used `qwen/qwen3.5-9b` locally.
 - Department heads, Finance, Security, Privacy and Legal approvers are not modelled as people in the data, so the UI checks only Manager and Department Head identities.
 - No seat-usage data: "unused existing capacity" cannot be verified.
 - The keyword injection scanner is a backstop; disguised injections are caught only by the model. Neither path can change approvals.
 - The summary filter is conservative and sometimes replaces a correct summary with a template sentence.
-- 39 cases is a small test set; differences of one or two cases between architectures are within noise.
+- Small sample: A finished 9 cases and B 28, one repeat each. Differences of one case are within noise.
+- Two ambiguous cases (EXT-15, EXT-16) score B's clarification question as wrong; the blind labeller considered asking acceptable.
+- The starter's `run_public_evals.py` needs a live model and the mock API; its checks are also applied inside `run_eval.py` ("Public minimum checks").

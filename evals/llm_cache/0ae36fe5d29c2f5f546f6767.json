@@ -1,0 +1,23 @@
+{
+ "label": "single.final",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 39949.9,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [\"customer_pii\"], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"The catalog already has NeuralDesk Business (same vendor, same category, 150 seats, company-wide). The request is for a new product from the same vendor in the same category. This is not a credible gap because the existing tool is company-wide and has capacity for 150 seats. The request should be reviewed against the existing tool first.\", \"questions_for_requester\": [\"Please confirm whether the existing NeuralDesk Business license (150 seats, company-wide) can be extended to include the 20 Customer Success users needed for this request, rather than purchasing a new license.\", \"Please clarify if the existing NeuralDesk Business license has any data-access restrictions that would prevent it from being used for customer PII in the Customer Success department.\"], \"summary\": \"The request to purchase NeuralDesk Support Assistant for $6,000 annually is within the Customer Success department's available budget ($7,000). However, the catalog already lists NeuralDesk Business (same vendor, same category) with 150 seats available company-wide. The request involves customer PII and requires integrations, triggering security, privacy, and legal reviews. Before approving a new purchase, the existing NeuralDesk Business license should be reviewed to determine if it can be extended to cover this use case.\", \"proposed_action\": \"REVIEW_EXISTING_TOOL_FIRST\", \"proposed_approvals\": [\"Department Head\", \"Procurement\", \"Security\", \"Privacy\", \"Legal\"], \"proposed_risk_flags\": [\"existing_tool_overlap\", \"security_review_required\", \"privacy_review_required\", \"legal_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Mia Thompson is in Customer Success department, reporting to Director Robert King (E007).\", \"source\": \"lookup_requester\"}, {\"call_id\": \"T2\", \"finding\": \"Catalog shows NeuralDesk Business (same vendor, same category) with 150 seats, company-wide scope, status 'Approved - limited use'.\", \"source\": \"search_catalog\"}, {\"call_id\": \"T3\", \"finding\": \"Vendor NeuralDesk is approved in registry with security status 'Approved' as of 2026-03-02.\", \"source\": \"get_vendor_registry\"}, {\"call_id\": \"T4\", \"finding\": \"Vendor risk service shows NeuralDesk as 'medium' risk, approved, with data stored outside region.\", \"source\": \"get_vendor_risk\"}, {\"call_id\": \"T5\", \"finding\": \"Customer Success department has $7,000 available budget; requested $6,000 is within budget.\", \"source\": \"check_budget\"}, {\"call_id\": \"T6\", \"finding\": \"No open requests for NeuralDesk in Customer Success department; Operations has an approved purchase of NeuralDesk Business (PO-2531).\", \"source\": \"get_purchase_history\"}, {\"call_id\": \"T7\", \"finding\": \"Policy evaluation recommends REVIEW_EXISTING_TOOL_FIRST due to catalog overlap and required reviews for customer PII, cross-region data, and legal terms.\", \"source\": \"evaluate_policy\"}]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 701,
+   "prompt_token_count": 3615
+  }
+ }
+}

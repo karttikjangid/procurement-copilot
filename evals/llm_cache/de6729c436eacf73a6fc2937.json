@@ -1,0 +1,54 @@
+{
+ "label": "single.turn1",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 32359.6,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "employee_id": "E004"
+        },
+        "name": "lookup_requester"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "product_name": "NimbusAI Contract Reviewer",
+         "vendor_name": "NimbusAI",
+         "category": "Legal AI"
+        },
+        "name": "search_catalog"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "vendor_name": "NimbusAI"
+        },
+        "name": "get_vendor_registry"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "vendor_name": "NimbusAI"
+        },
+        "name": "get_vendor_risk"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 496,
+   "prompt_token_count": 2571
+  }
+ }
+}

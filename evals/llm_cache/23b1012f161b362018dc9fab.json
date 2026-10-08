@@ -1,0 +1,29 @@
+{
+ "label": "single.turn2",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 89796.1,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "department": "Marketing",
+         "annual_cost_usd": 0
+        },
+        "name": "check_budget"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 579,
+   "prompt_token_count": 3326
+  }
+ }
+}

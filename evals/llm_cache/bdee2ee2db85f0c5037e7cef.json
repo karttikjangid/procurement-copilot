@@ -1,0 +1,23 @@
+{
+ "label": "staged.analyst",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 35325.9,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": false, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"no_existing_tool\", \"questions_for_requester\": [\"Please clarify the specific business purpose for purchasing QuietNote Captions Teams. The current justification ('Need this tool for work stuff, please sort it out.') is too vague for a reviewer to assess value and necessity.\"], \"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for Teams, costing $2,000 annually for 5 users. The requester is Noah Williams in the Finance department, which has sufficient budget ($29,000 available). The vendor QuietNote is approved with current security and legal status (reviewed 2026-05-01). However, the business justification is vague and does not explain why this specific tool is needed or what problem it solves. No existing tool in the catalog or purchase history overlaps with this request.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 218,
+   "prompt_token_count": 2571
+  }
+ }
+}

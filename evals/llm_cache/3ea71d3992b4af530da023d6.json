@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 88461.7,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Ops, an accessibility tool costing $3,000 annually for 6 users in the Engineering department. The budget check shows $26,000 is available, so the cost is within budget. The vendor QuietNote is approved with current security and legal status. However, the business justification requests read access to production AWS logs, which conflicts with the declared data access level of 'internal_documents'. This creates a security and compliance concern that must be resolved.\", \"proposed_action\": \"REQUEST_CLARIFICATION\", \"proposed_approvals\": [\"Department Head\", \"Procurement\", \"Security\"], \"proposed_risk_flags\": [\"security_review_required\", \"missing_information\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester is Arjun Mehta, Engineering department, IC5 level, with manager Maya Rao (Director).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Engineering department has $26,000 available software budget; requested cost is $3,000, which is within budget.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"No existing matches found in the software catalog for QuietNote Ops or QuietNote in the Accessibility category.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests for QuietNote in the Engineering department.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote (V900) is approved with current security status (review date 2026-05-01, valid for 365 days).\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment for QuietNote is 'low' with current security review status (last review 2026-05-01).\", \"source\": \"GET http://127.0.0.1:8012/EXT-16/none/vendor-risk/QuietNote\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine recommends REQUEST_CLARIFICATION due to missing business purpose clarity and production data access conflict.\", \"source\": \"Policy engine result\"}], \"questions_for_requester\": [\"Please clarify the data access level. The business justification states read access to production AWS logs, but the declared data access level is 'internal_documents'. This discrepancy needs resolution before review can proceed.\"], \"summary_for_reviewer\": \"The request is for QuietNote Ops, an accessibility tool costing $3,000 annually for 6 users in the Engineering department. The budget check shows $26,000 is available, so the cost is within budget. The vendor QuietNote is approved with current security and legal status. However, the business justification requests read access to production AWS logs, which conflicts with the declared data access level of 'internal_documents'. This creates a security and compliance concern that must be resolved. The policy engine recommends requesting clarification from the requester before any approval routing.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 668,
+   "prompt_token_count": 3241
+  }
+ }
+}

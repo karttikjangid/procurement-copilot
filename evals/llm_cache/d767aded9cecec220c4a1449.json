@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 87631.5,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for TaskFlow Pro (Project Management) at $8,000/year for 15 users in Marketing. Budget is available ($15,000 remaining). However, TaskFlow is already approved company-wide for $36,000 covering 180 seats, purchased by Operations on 2026-06-22. The vendor security and legal terms are current and approved. This is a duplicate vendor purchase that should be reviewed for license allocation rather than a new vendor approval.\", \"proposed_action\": \"REVIEW_EXISTING_TOOL_FIRST\", \"proposed_approvals\": [\"Department Head\", \"Procurement\"], \"proposed_risk_flags\": [\"existing_tool_overlap\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Sarah Lee (E001) is in Marketing department with manager David Chen (E009).\", \"reference\": \"Policy 1\"}, {\"call_id\": \"T2\", \"finding\": \"Marketing department has $15,000 available software budget; requested cost is $8,000, within budget.\", \"reference\": \"Policy 2\"}, {\"call_id\": \"T3\", \"finding\": \"Catalog search found existing TaskFlow (same_vendor/same_product/same_category, 180 seats, Company-wide).\", \"reference\": \"Policy 3\"}, {\"call_id\": \"T4\", \"finding\": \"Purchase history shows TaskFlow was purchased by Operations on 2026-06-22 for $36,000, company-wide agreement.\", \"reference\": \"Policy 3\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor registry shows TaskFlow (V003) is approved with current security status (review date 2026-06-03).\", \"reference\": \"Policy 5\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows TaskFlow is low risk, security approved, last reviewed 2026-06-03 (within 365 days).\", \"reference\": \"Policy 5\"}], \"questions_for_requester\": [\"Please confirm if the Marketing team needs additional TaskFlow licenses beyond the existing company-wide agreement, or if this is a new vendor instance.\", \"Please clarify the specific use case for TaskFlow Pro in Marketing to ensure it aligns with the existing company-wide TaskFlow license.\"], \"summary_text\": \"The request is for TaskFlow Pro (Project Management) at $8,000/year for 15 users in Marketing. Budget is available ($15,000 remaining). However, TaskFlow is already approved company-wide for $36,000 covering 180 seats, purchased by Operations on 2026-06-22. The vendor security and legal terms are current and approved. This is a duplicate vendor purchase that should be reviewed for license allocation rather than a new vendor approval.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 639,
+   "prompt_token_count": 3445
+  }
+ }
+}

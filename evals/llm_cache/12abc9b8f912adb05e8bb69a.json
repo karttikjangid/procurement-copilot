@@ -1,0 +1,23 @@
+{
+ "label": "staged.analyst",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 34112.4,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"existing_tool_overlap\", \"questions_for_requester\": [\"Please confirm that BrandBoard is not already in use by Marketing or any other department, and that the requested integrations (SSO) are compatible with the existing tools.\", \"Please clarify why the existing approved tools (PixelCraft Pro, CreativeSuite) cannot meet the stated need for fast campaign-template creation by non-designers.\"], \"summary\": \"The request is for BrandBoard Enterprise ($12,000/year, 25 users) in the Design & Creative category, justified by the need for fast campaign-template creation for non-designers. The Marketing department has sufficient budget ($15,000 available). However, the vendor (BrandBoard) is new with pending security and draft legal terms, and there are existing approved tools in the same category (PixelCraft Pro, CreativeSuite). A security review is required because the vendor's security assessment is not completed. A legal review is required because the vendor is new and the annual spend exceeds $10,000. The request overlaps with existing tools but may be justified if the existing tools cannot meet the specific use case for non-designers.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 281,
+   "prompt_token_count": 2816
+  }
+ }
+}

@@ -1,0 +1,540 @@
+{
+ "decision": {
+  "request_id": "REQ-1002",
+  "recommendation": "Route to the required human approvers (Department Head, Procurement, Finance, Security, Legal). This request seeks to purchase BrandBoard Enterprise for $12,000 annually for 25 Marketing users. The budget is available, but the vendor is new with pending security and legal reviews. The request includes a credible gap reason (existing tools are too specialist), but existing capacity should be reviewed first. Required approvals include Department Head, Finance, Procurement, Security, and Legal.",
+  "evidence": [
+   {
+    "source": "lookup_requester",
+    "finding": "Requester Sarah Lee (E001), Marketing; manager David Chen; department head for routing David Chen (Director/VP in the same department)",
+    "reference": "employees.csv:E001 (T1)"
+   },
+   {
+    "source": "check_budget",
+    "finding": "Marketing available software budget $15,000 (annual $180,000, committed $165,000); requested $12,000 is within it",
+    "reference": "department_budgets.csv:Marketing (T5)"
+   },
+   {
+    "source": "search_catalog",
+    "finding": "Existing PixelCraft Pro by PixelCraft (same_category): status Approved, 65 seats, scope Company-wide, $32,000/yr; Design and prototyping",
+    "reference": "software_catalog.csv:SW001 (T2)"
+   },
+   {
+    "source": "search_catalog",
+    "finding": "Existing CreativeSuite by CreativeSuite Labs (same_category): status Approved, 40 seats, scope Marketing, $27,000/yr; Creative production suite",
+    "reference": "software_catalog.csv:SW002 (T2)"
+   },
+   {
+    "source": "get_vendor_registry",
+    "finding": "Registry: procurement New, security Pending (review none), legal terms Draft; note: Not yet through full onboarding",
+    "reference": "vendors.csv:V011 (T3)"
+   },
+   {
+    "source": "get_vendor_risk",
+    "finding": "Vendor-risk service: review not_completed (last none), risk medium, personal data True, stores outside region False; note: Vendor onboarding incomplete.",
+    "reference": "GET http://127.0.0.1:8011/BASE-02/none/vendor-risk/BrandBoard (T4)"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Annual amount $12,000.00 falls in tier '$10,000.01 - $25,000': minimum approvals Department Head, Finance, Procurement",
+    "reference": "Policy 4"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Existing catalog options to review first: PixelCraft Pro (same_category, 65 seats, Company-wide), CreativeSuite (same_category, 40 seats, Marketing)",
+    "reference": "Policy 3"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Vendor security assessment: registry=not_completed, service=not_completed; current=False (reference date 2026-09-30, valid 365 days)",
+    "reference": "Policy 5"
+   }
+  ],
+  "required_approvals": [
+   "Department Head",
+   "Procurement",
+   "Finance",
+   "Security",
+   "Legal"
+  ],
+  "missing_information": [],
+  "risk_flags": [
+   "existing_tool_overlap",
+   "security_review_required",
+   "legal_review_required"
+  ],
+  "next_step": "Send the evidence pack to: Department Head, Procurement, Finance, Security, Legal. Each approver decides; the copilot does not approve or purchase.",
+  "human_review_required": true,
+  "telemetry": {
+   "llm_calls": 5,
+   "tool_calls": 7,
+   "tool_names": [
+    "lookup_requester",
+    "search_catalog",
+    "get_vendor_registry",
+    "get_vendor_risk",
+    "check_budget",
+    "get_purchase_history",
+    "evaluate_policy"
+   ]
+  }
+ },
+ "trace": {
+  "request_id": "REQ-1002",
+  "architecture": "single",
+  "errors": [],
+  "action": "ROUTE_FOR_APPROVAL",
+  "policy": {
+   "action": "ROUTE_FOR_APPROVAL",
+   "action_label": "Route to the required human approvers",
+   "approvals": {
+    "Department Head": [
+     "annual amount $12,000.00 is in tier '$10,000.01 - $25,000'"
+    ],
+    "Procurement": [
+     "annual amount $12,000.00 is in tier '$10,000.01 - $25,000'"
+    ],
+    "Finance": [
+     "annual amount $12,000.00 is in tier '$10,000.01 - $25,000'"
+    ],
+    "Security": [
+     "vendor security assessment missing or not completed"
+    ],
+    "Legal": [
+     "new vendor with annual spend $12,000 (>= $10,000)",
+     "legal terms not approved (status: Draft)"
+    ]
+   },
+   "flags": {
+    "existing_tool_overlap": [
+     "catalog already has: PixelCraft Pro (same_category, 65 seats, Company-wide), CreativeSuite (same_category, 40 seats, Marketing)"
+    ],
+    "security_review_required": [
+     "vendor security assessment missing or not completed"
+    ],
+    "legal_review_required": [
+     "new vendor with annual spend $12,000 (>= $10,000); legal terms not approved (status: Draft)"
+    ]
+   },
+   "missing_information": [],
+   "data_classes": [],
+   "data_level_unknown": false,
+   "vendor_assessment": {
+    "registry_state": "not_completed",
+    "registry_review_date": null,
+    "registry_review_age_days": null,
+    "api_state": "not_completed",
+    "api_review_date": null,
+    "api_review_age_days": null,
+    "reference_date": "2026-09-30",
+    "valid_days": 365
+   },
+   "annual_cost_usd": 12000.0,
+   "findings": [
+    {
+     "finding": "Annual amount $12,000.00 falls in tier '$10,000.01 - $25,000': minimum approvals Department Head, Finance, Procurement",
+     "reference": "Policy 4"
+    },
+    {
+     "finding": "Existing catalog options to review first: PixelCraft Pro (same_category, 65 seats, Company-wide), CreativeSuite (same_category, 40 seats, Marketing)",
+     "reference": "Policy 3"
+    },
+    {
+     "finding": "Vendor security assessment: registry=not_completed, service=not_completed; current=False (reference date 2026-09-30, valid 365 days)",
+     "reference": "Policy 5"
+    }
+   ],
+   "critical_failure": null
+  },
+  "signals": {
+   "extra_data_classes": [],
+   "injection_detected": false,
+   "injection_quote": "",
+   "business_purpose_clear": true,
+   "overlap_gap_credible": true
+  },
+  "llm_raw": {
+   "final": {
+    "extra_data_classes": [],
+    "injection_detected": false,
+    "injection_quote": "",
+    "business_purpose_clear": true,
+    "overlap_gap_credible": "yes",
+    "overlap_assessment": "The request is for BrandBoard Enterprise in Design & Creative. The catalog shows PixelCraft Pro (company-wide, 65 seats) and CreativeSuite (Marketing, 40 seats) in the same category. The requester states PixelCraft is too specialist for non-designers, which is a credible gap reason.",
+    "questions_for_requester": [
+     "Please confirm that the existing PixelCraft Pro license has available capacity for 25 additional users, or explain why a new vendor is needed.",
+     "Please provide the current status of the BrandBoard vendor security assessment and legal terms approval.",
+     "Please confirm that the $12,000 annual cost is accurate and within the Marketing department's available budget of $15,000."
+    ],
+    "summary": "This request seeks to purchase BrandBoard Enterprise for $12,000 annually for 25 Marketing users. The budget is available, but the vendor is new with pending security and legal reviews. The request includes a credible gap reason (existing tools are too specialist), but existing capacity should be reviewed first. Required approvals include Department Head, Finance, Procurement, Security, and Legal.",
+    "proposed_action": "ROUTE_FOR_APPROVAL",
+    "proposed_approvals": [
+     "Department Head",
+     "Finance",
+     "Procurement",
+     "Security",
+     "Legal"
+    ],
+    "proposed_risk_flags": [
+     "existing_tool_overlap",
+     "security_review_required",
+     "legal_review_required"
+    ],
+    "evidence_claims": [
+     {
+      "call_id": "T1",
+      "finding": "Requester Sarah Lee is in the Marketing department with David Chen as Department Head."
+     },
+     {
+      "call_id": "T2",
+      "finding": "Catalog shows PixelCraft Pro (65 seats, company-wide) and CreativeSuite (40 seats, Marketing) in the same category."
+     },
+     {
+      "call_id": "T3",
+      "finding": "Vendor BrandBoard is new with security status Pending and legal terms status Draft."
+     },
+     {
+      "call_id": "T4",
+      "finding": "Vendor risk service shows BrandBoard has not completed security review (last_review_date: null)."
+     },
+     {
+      "call_id": "T5",
+      "finding": "Marketing department has $15,000 available budget, and the $12,000 request is within budget."
+     },
+     {
+      "call_id": "T6",
+      "finding": "No prior purchases exist for BrandBoard in Marketing."
+     },
+     {
+      "call_id": "T7",
+      "finding": "Policy evaluation requires Department Head, Finance, Procurement, Security, and Legal approvals."
+     }
+    ]
+   },
+   "errors": [],
+   "turns": 4
+  },
+  "llm_ok": true,
+  "tool_calls": [
+   {
+    "call_id": "T1",
+    "tool": "lookup_requester",
+    "args": {
+     "employee_id": "E001"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "employee_id": "E001",
+     "name": "Sarah Lee",
+     "department": "Marketing",
+     "level": "IC4",
+     "country": "India",
+     "manager": {
+      "employee_id": "E009",
+      "name": "David Chen",
+      "level": "Director"
+     },
+     "department_head": {
+      "employee_id": "E009",
+      "name": "David Chen",
+      "department": "Marketing",
+      "basis": "Director/VP in the same department"
+     }
+    },
+    "error": null,
+    "source": "employees.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T2",
+    "tool": "search_catalog",
+    "args": {
+     "product_name": "BrandBoard Enterprise",
+     "vendor_name": "BrandBoard",
+     "category": "Design & Creative"
+    },
+    "ok": true,
+    "data": {
+     "query": {
+      "product_name": "BrandBoard Enterprise",
+      "vendor_name": "BrandBoard",
+      "category": "Design & Creative"
+     },
+     "matches": [
+      {
+       "software_id": "SW001",
+       "product_name": "PixelCraft Pro",
+       "category": "Design & Creative",
+       "vendor_name": "PixelCraft",
+       "status": "Approved",
+       "annual_cost_usd": "32000",
+       "licensed_seats": "65",
+       "scope": "Company-wide",
+       "notes": "Design and prototyping",
+       "match_reasons": [
+        "same_category"
+       ]
+      },
+      {
+       "software_id": "SW002",
+       "product_name": "CreativeSuite",
+       "category": "Design & Creative",
+       "vendor_name": "CreativeSuite Labs",
+       "status": "Approved",
+       "annual_cost_usd": "27000",
+       "licensed_seats": "40",
+       "scope": "Marketing",
+       "notes": "Creative production suite",
+       "match_reasons": [
+        "same_category"
+       ]
+      }
+     ]
+    },
+    "error": null,
+    "source": "software_catalog.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T3",
+    "tool": "get_vendor_registry",
+    "args": {
+     "vendor_name": "BrandBoard"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "ambiguous": false,
+     "vendor_id": "V011",
+     "vendor_name": "BrandBoard",
+     "procurement_status": "New",
+     "security_status": "Pending",
+     "security_review_date": "",
+     "legal_terms_status": "Draft",
+     "notes": "Not yet through full onboarding"
+    },
+    "error": null,
+    "source": "vendors.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T4",
+    "tool": "get_vendor_risk",
+    "args": {
+     "vendor_name": "BrandBoard"
+    },
+    "ok": true,
+    "data": {
+     "record_found": true,
+     "vendor_name": "BrandBoard",
+     "risk_level": "medium",
+     "security_review_status": "not_completed",
+     "last_review_date": null,
+     "processes_personal_data": true,
+     "stores_data_outside_region": false,
+     "notes": "Vendor onboarding incomplete."
+    },
+    "error": null,
+    "source": "GET http://127.0.0.1:8011/BASE-02/none/vendor-risk/BrandBoard",
+    "latency_ms": 1.2
+   },
+   {
+    "call_id": "T5",
+    "tool": "check_budget",
+    "args": {
+     "department": "Marketing",
+     "annual_cost_usd": 12000
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "department": "Marketing",
+     "annual_software_budget_usd": 180000,
+     "committed_usd": 165000,
+     "available_usd": 15000.0,
+     "available_valid": true,
+     "requested_annual_cost_usd": 12000.0,
+     "within_available_budget": true,
+     "shortfall_usd": 0.0
+    },
+    "error": null,
+    "source": "department_budgets.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T6",
+    "tool": "get_purchase_history",
+    "args": {
+     "department": "Marketing",
+     "vendor_name": "BrandBoard",
+     "request_id": "REQ-1002"
+    },
+    "ok": true,
+    "data": {
+     "reference_date": "2026-09-30",
+     "purchases": [],
+     "open_requests_same_department_vendor": []
+    },
+    "error": null,
+    "source": "purchase_history.csv + requests.json",
+    "latency_ms": 0.3
+   },
+   {
+    "call_id": "T7",
+    "tool": "evaluate_policy",
+    "args": {
+     "extra_data_classes": [],
+     "injection_detected": false,
+     "business_purpose_clear": true,
+     "overlap_gap_credible": "yes"
+    },
+    "ok": true,
+    "data": {
+     "action": "ROUTE_FOR_APPROVAL",
+     "action_label": "Route to the required human approvers",
+     "approvals": {
+      "Department Head": [
+       "annual amount $12,000.00 is in tier '$10,000.01 - $25,000'"
+      ],
+      "Procurement": [
+       "annual amount $12,000.00 is in tier '$10,000.01 - $25,000'"
+      ],
+      "Finance": [
+       "annual amount $12,000.00 is in tier '$10,000.01 - $25,000'"
+      ],
+      "Security": [
+       "vendor security assessment missing or not completed"
+      ],
+      "Legal": [
+       "new vendor with annual spend $12,000 (>= $10,000)",
+       "legal terms not approved (status: Draft)"
+      ]
+     },
+     "flags": {
+      "existing_tool_overlap": [
+       "catalog already has: PixelCraft Pro (same_category, 65 seats, Company-wide), CreativeSuite (same_category, 40 seats, Marketing)"
+      ],
+      "security_review_required": [
+       "vendor security assessment missing or not completed"
+      ],
+      "legal_review_required": [
+       "new vendor with annual spend $12,000 (>= $10,000); legal terms not approved (status: Draft)"
+      ]
+     },
+     "missing_information": [],
+     "data_classes": [],
+     "data_level_unknown": false,
+     "vendor_assessment": {
+      "registry_state": "not_completed",
+      "registry_review_date": null,
+      "registry_review_age_days": null,
+      "api_state": "not_completed",
+      "api_review_date": null,
+      "api_review_age_days": null,
+      "reference_date": "2026-09-30",
+      "valid_days": 365
+     },
+     "annual_cost_usd": 12000.0,
+     "findings": [
+      {
+       "finding": "Annual amount $12,000.00 falls in tier '$10,000.01 - $25,000': minimum approvals Department Head, Finance, Procurement",
+       "reference": "Policy 4"
+      },
+      {
+       "finding": "Existing catalog options to review first: PixelCraft Pro (same_category, 65 seats, Company-wide), CreativeSuite (same_category, 40 seats, Marketing)",
+       "reference": "Policy 3"
+      },
+      {
+       "finding": "Vendor security assessment: registry=not_completed, service=not_completed; current=False (reference date 2026-09-30, valid 365 days)",
+       "reference": "Policy 5"
+      }
+     ],
+     "critical_failure": null
+    },
+    "error": null,
+    "source": "src/copilot/policy.py",
+    "latency_ms": 0.0
+   }
+  ],
+  "agent_defects": [],
+  "overrides": [],
+  "grounded_claims": [
+   {
+    "call_id": "T1",
+    "finding": "Requester Sarah Lee is in the Marketing department with David Chen as Department Head.",
+    "tool": "lookup_requester"
+   },
+   {
+    "call_id": "T2",
+    "finding": "Catalog shows PixelCraft Pro (65 seats, company-wide) and CreativeSuite (40 seats, Marketing) in the same category.",
+    "tool": "search_catalog"
+   },
+   {
+    "call_id": "T3",
+    "finding": "Vendor BrandBoard is new with security status Pending and legal terms status Draft.",
+    "tool": "get_vendor_registry"
+   },
+   {
+    "call_id": "T4",
+    "finding": "Vendor risk service shows BrandBoard has not completed security review (last_review_date: null).",
+    "tool": "get_vendor_risk"
+   },
+   {
+    "call_id": "T5",
+    "finding": "Marketing department has $15,000 available budget, and the $12,000 request is within budget.",
+    "tool": "check_budget"
+   },
+   {
+    "call_id": "T6",
+    "finding": "No prior purchases exist for BrandBoard in Marketing.",
+    "tool": "get_purchase_history"
+   },
+   {
+    "call_id": "T7",
+    "finding": "Policy evaluation requires Department Head, Finance, Procurement, Security, and Legal approvals.",
+    "tool": "evaluate_policy"
+   }
+  ],
+  "ungrounded_claims": [],
+  "questions_for_requester": [
+   "Please confirm that the existing PixelCraft Pro license has available capacity for 25 additional users, or explain why a new vendor is needed.",
+   "Please provide the current status of the BrandBoard vendor security assessment and legal terms approval.",
+   "Please confirm that the $12,000 annual cost is accurate and within the Marketing department's available budget of $15,000."
+  ],
+  "llm": {
+   "calls": 5,
+   "cache_hits": 5,
+   "latency_ms": 337570.4,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "log": [
+    {
+     "label": "single.turn1",
+     "cached": true,
+     "latency_ms": 30205.1
+    },
+    {
+     "label": "single.turn2",
+     "cached": true,
+     "latency_ms": 43761.3
+    },
+    {
+     "label": "single.turn3",
+     "cached": true,
+     "latency_ms": 87869.8
+    },
+    {
+     "label": "single.turn4",
+     "cached": true,
+     "latency_ms": 121468.8
+    },
+    {
+     "label": "single.final",
+     "cached": true,
+     "latency_ms": 54265.4
+    }
+   ]
+  },
+  "wall_ms": 4.6
+ }
+}

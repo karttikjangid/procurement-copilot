@@ -1,0 +1,23 @@
+{
+ "label": "staged.analyst",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 15555.7,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"existing_tool_overlap\", \"questions_for_requester\": [], \"summary\": \"The request is for TaskFlow Pro (Project Management) at $8,000/year for 15 users in Marketing. Budget is available ($15,000 remaining). However, TaskFlow is already approved company-wide for $36,000 with 180 seats, purchased by Operations on 2026-06-22. The vendor security and legal terms are current and approved. This is a duplicate vendor purchase that should be reviewed for license allocation rather than a new vendor approval.\", \"risk_flags\": [\"existing_tool_overlap\"]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 177,
+   "prompt_token_count": 2820
+  }
+ }
+}

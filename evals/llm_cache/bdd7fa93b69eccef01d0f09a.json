@@ -1,0 +1,39 @@
+{
+ "label": "single.turn2",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 20359.7,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "department": "Engineering",
+         "annual_cost_usd": 18000
+        },
+        "name": "check_budget"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "department": "Engineering",
+         "vendor_name": "CodeMate",
+         "request_id": "REQ-1003"
+        },
+        "name": "get_purchase_history"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 222,
+   "prompt_token_count": 3323
+  }
+ }
+}

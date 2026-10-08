@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 79439.7,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The vendor QuietNote is approved but its security assessment expired on 2026-09-30 (last reviewed 2025-09-29, valid for 365 days). No existing tool overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level, but the expired vendor security assessment requires a Security review before approval.\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Manager\"], \"proposed_risk_flags\": [\"vendor_review_expired\", \"security_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester is Noah Williams in Finance department, manager is Priya Shah (Director).\", \"reference\": \"Policy 1\"}, {\"call_id\": \"T2\", \"finding\": \"Finance department has $29,000 available software budget; requested cost is $500, within budget.\", \"reference\": \"Policy 2\"}, {\"call_id\": \"T3\", \"finding\": \"No existing tool in catalog matches the requested product or category.\", \"reference\": \"Policy 3\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests for QuietNote in Finance department.\", \"reference\": \"Policy 3\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote is approved in registry with security status 'Approved' as of 2025-09-29.\", \"reference\": \"Policy 5\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows 'approved' status with last review date 2025-09-29.\", \"reference\": \"Policy 5\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine flags vendor security assessment expired (366 days old as of 2026-09-30, valid for 365 days).\", \"reference\": \"Policy 5\"}], \"questions_for_requester\": [\"Please confirm that the vendor security assessment for QuietNote will be renewed before the purchase is approved.\", \"Please confirm that the requested integrations (none listed) are still valid for the new purchase.\"], \"summary_for_reviewer\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The vendor QuietNote is approved but its security assessment expired on 2026-09-30 (last reviewed 2025-09-29, valid for 365 days). No existing tool overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level, but the expired vendor security assessment requires a Security review before approval.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 639,
+   "prompt_token_count": 3137
+  }
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 77792.3,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for a new vendor (BrightLeaf) to purchase an analytics add-on costing $12,000 annually for 10 users. The Finance department has sufficient budget ($29,000 available). No existing tool or purchase history overlaps with this request. The vendor is not in the registry and has no risk assessment on file.\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Department Head\", \"Finance\", \"Procurement\", \"Security\", \"Legal\"], \"proposed_risk_flags\": [\"vendor_risk_unavailable\", \"legal_review_required\", \"security_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Noah Williams is in the Finance department with manager Priya Shah (Director).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Finance department has $29,000 available software budget; requested cost is $12,000 (within budget).\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"No existing catalog matches for BrightLeaf Analytics or BrightLeaf vendor.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests for BrightLeaf in Finance department.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor BrightLeaf is not found in the vendor registry.\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"No vendor risk assessment record exists for BrightLeaf.\", \"source\": \"GET http://127.0.0.1:8012/EXT-10/none/vendor-risk/BrightLeaf\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine routes request for approval with required approvers (Department Head, Finance, Procurement, Security, Legal) and flags (vendor_risk_unavailable, legal_review_required, security_review_required).\", \"source\": \"Policy engine result\"}], \"questions_for_requester\": [\"Please confirm that BrightLeaf Analytics is a new vendor and not previously used by the company.\", \"Please confirm that the requested integrations are truly none and that no manual data export will suffice.\"], \"summary_for_reviewer\": \"The request is for a new vendor (BrightLeaf) to purchase an analytics add-on costing $12,000 annually for 10 users. The Finance department has sufficient budget ($29,000 available). No existing tool or purchase history overlaps with this request. The vendor is not in the registry and has no risk assessment on file. The policy engine routes this for approval with required approvers (Department Head, Finance, Procurement, Security, Legal) and flags (vendor_risk_unavailable, legal_review_required, security_review_required).\", \"data_access_level\": \"internal_documents\", \"data_classes\": []}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 629,
+   "prompt_token_count": 3120
+  }
+ }
+}

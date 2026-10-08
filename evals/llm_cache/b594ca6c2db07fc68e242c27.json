@@ -1,0 +1,23 @@
+{
+ "label": "single.final",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 61776.5,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"The catalog already has TaskFlow (same_vendor/same_product/same_category, 180 seats, Company-wide). The request is for 15 users under the same vendor/product. This is a potential overlap that should be reviewed before approving a new purchase.\", \"questions_for_requester\": [\"Please confirm whether the Marketing team needs additional TaskFlow licenses beyond the existing company-wide agreement, or if this request should be fulfilled under the current contract.\", \"Please specify the exact business purpose and how this new purchase differs from the existing company-wide TaskFlow license.\"], \"summary\": \"The request to purchase TaskFlow Pro for Marketing is for $8,000 annually for 15 users. The vendor (TaskFlow) has an approved security assessment and current vendor status. However, the catalog already lists TaskFlow as an approved, company-wide product with 180 licensed seats. This suggests the existing agreement may already cover the Marketing team's needs. The request should be reviewed to determine if additional licenses are necessary or if the existing capacity can be utilized.\", \"proposed_action\": \"REVIEW_EXISTING_TOOL_FIRST\", \"proposed_approvals\": [\"Department Head\", \"Procurement\"], \"proposed_risk_flags\": [\"existing_tool_overlap\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Sarah Lee is in the Marketing department with David Chen as Department Head.\"}, {\"call_id\": \"T2\", \"finding\": \"Catalog search found TaskFlow (same_vendor/same_product/same_category) with 180 licensed seats and company-wide scope.\"}, {\"call_id\": \"T3\", \"finding\": \"Vendor registry shows TaskFlow with approved status and security review date 2026-06-03.\"}, {\"call_id\": \"T4\", \"finding\": \"Vendor risk service shows TaskFlow with low risk level, approved status, and last review date 2026-06-03.\"}, {\"call_id\": \"T5\", \"finding\": \"Marketing department has $15,000 available in software budget, and the $8,000 request is within budget.\"}, {\"call_id\": \"T6\", \"finding\": \"Purchase history shows TaskFlow was purchased by Operations on 2026-06-22 for $36,000 as a company-wide agreement.\"}, {\"call_id\": \"T7\", \"finding\": \"Policy evaluation recommends REVIEW_EXISTING_TOOL_FIRST with Department Head and Procurement approvals, and flags existing_tool_overlap.\"}]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 578,
+   "prompt_token_count": 3413
+  }
+ }
+}

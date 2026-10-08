@@ -1,0 +1,23 @@
+{
+ "label": "staged.analyst",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 30303.0,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"no_existing_tool\", \"questions_for_requester\": [\"Please confirm that BrightLeaf Analytics is a new vendor and not previously used by the company.\", \"Please confirm that the requested integrations are truly none and that no manual data export will suffice.\"], \"summary\": \"The request is for a new vendor (BrightLeaf) to purchase an analytics add-on costing $12,000 annually for 10 users. The Finance department has sufficient budget ($29,000 available). No existing tool or purchase history overlaps with this request. The vendor is not in the registry and has no risk assessment on file.\", \"approval_threshold\": \"Department Head + Finance + Procurement\", \"risk_flags\": [\"vendor_risk_unavailable\", \"legal_review_required\"]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 199,
+   "prompt_token_count": 2427
+  }
+ }
+}

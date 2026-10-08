@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 78347.5,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $1,000.01 annually for 5 users. The requester is Noah Williams in the Finance department, which has $29,000 available in its software budget, so the cost is within budget. The vendor QuietNote is approved with current security and legal status (reviewed 2026-05-01, valid for 365 days through 2026-09-30). No existing tool in the catalog or purchase history overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level.\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Department Head\", \"Procurement\"], \"proposed_risk_flags\": [], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Noah Williams is in the Finance department with manager Priya Shah (Director).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Finance department has $29,000 available software budget; requested cost $1,000.01 is within budget.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"No existing tool in the catalog matches the requested product QuietNote Captions Teams.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests for QuietNote in the Finance department.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote is approved with current security and legal status (reviewed 2026-05-01).\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor QuietNote has low risk level; security review approved as of 2026-05-01.\", \"source\": \"GET http://127.0.0.1:8012/EXT-02/none/vendor-risk/QuietNote\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine recommends ROUTE_FOR_APPROVAL with Department Head and Procurement approvals required.\", \"source\": \"Policy engine result\"}]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 511,
+   "prompt_token_count": 3159
+  }
+ }
+}

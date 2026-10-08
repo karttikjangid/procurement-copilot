@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 53545.5,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for automatic captions on internal training videos, costing $7,000 annually for 5 users. The requester is Mia Thompson from Customer Success, with a manager and department head both being Robert King. The department has sufficient budget ($7,000 requested, $7,000 available). No existing tool in the catalog matches the request, and there is no purchase history for this vendor in the department. The vendor QuietNote is approved with current security and legal status (reviewed 2026-05-01, within 365-day validity). The business purpose is clear and meets accessibility needs. No security, privacy, or legal review is required based on the data access level (internal_documents) and vendor risk (low).\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Department Head\", \"Procurement\"], \"proposed_risk_flags\": [], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Mia Thompson (E005) is in Customer Success department, reporting to Robert King (E007) as both manager and department head.\"}, {\"call_id\": \"T2\", \"finding\": \"Customer Success department has $7,000.00 available in software budget, matching the requested annual cost of $7,000.00.\"}, {\"call_id\": \"T3\", \"finding\": \"No existing tool in the software catalog matches the requested product QuietNote Captions Teams.\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests exist for vendor QuietNote in the department.\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote (V900) has approved procurement and security status, with security review date 2026-05-01.\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows QuietNote as low risk, with approved security status and no personal data processing.\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine recommends ROUTE_FOR_APPROVAL with Department Head and Procurement approvals required for $7,000 annual cost.\"}], \"questions_for_requester\": []}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 490,
+   "prompt_token_count": 3200
+  }
+ }
+}

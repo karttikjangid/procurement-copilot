@@ -1,0 +1,23 @@
+{
+ "label": "staged.analyst",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 33400.8,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"no_existing_tool\", \"questions_for_requester\": [], \"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $1,000.01 annually for 5 users. The requester is Noah Williams in the Finance department, which has $29,000 available in its software budget, so the cost is within budget. The vendor QuietNote is approved with current security and legal status (reviewed 2026-05-01, valid for 365 days through 2026-09-30). No existing tool in the catalog or purchase history overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 210,
+   "prompt_token_count": 2577
+  }
+ }
+}

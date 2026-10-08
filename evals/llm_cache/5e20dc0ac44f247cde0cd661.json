@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 64981.4,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool costing $7,001 annually for 5 users. The department has a $7,000 available software budget, so the request exceeds the budget by $1.00 and requires a budget exception. The vendor is approved with current security and legal status, and there is no existing tool overlap. A budget exception review is needed.\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Department Head\", \"Procurement\", \"Finance\"], \"proposed_risk_flags\": [\"budget_insufficient\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Mia Thompson (E005) is in Customer Success department with manager Robert King (E007).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Customer Success department has $7,000 available software budget; request cost $7,001 exceeds available budget by $1.00.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"No existing tool in catalog matches the requested product QuietNote Captions Teams.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests for QuietNote in Customer Success department.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote (V900) has approved procurement, security, and legal status.\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment for QuietNote is low with current security review (2026-05-01).\", \"source\": \"GET http://127.0.0.1:8012/EXT-06/none/vendor-risk/QuietNote\"}], \"questions_for_requester\": [\"Please confirm that the $7,001 annual cost is accurate and that the department has budget approval to exceed the $7,000 available limit by $1.00.\"], \"summary_text\": \"The request is for QuietNote Captions Teams, an accessibility tool costing $7,001 annually for 5 users. The department has a $7,000 available software budget, so the request exceeds the budget by $1.00 and requires a budget exception. The vendor is approved with current security and legal status, and there is no existing tool overlap. A budget exception review is needed.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 553,
+   "prompt_token_count": 3179
+  }
+ }
+}

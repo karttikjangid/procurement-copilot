@@ -1,0 +1,23 @@
+{
+ "label": "single.final",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 54265.4,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"yes\", \"overlap_assessment\": \"The request is for BrandBoard Enterprise in Design & Creative. The catalog shows PixelCraft Pro (company-wide, 65 seats) and CreativeSuite (Marketing, 40 seats) in the same category. The requester states PixelCraft is too specialist for non-designers, which is a credible gap reason.\", \"questions_for_requester\": [\"Please confirm that the existing PixelCraft Pro license has available capacity for 25 additional users, or explain why a new vendor is needed.\", \"Please provide the current status of the BrandBoard vendor security assessment and legal terms approval.\", \"Please confirm that the $12,000 annual cost is accurate and within the Marketing department's available budget of $15,000.\"], \"summary\": \"This request seeks to purchase BrandBoard Enterprise for $12,000 annually for 25 Marketing users. The budget is available, but the vendor is new with pending security and legal reviews. The request includes a credible gap reason (existing tools are too specialist), but existing capacity should be reviewed first. Required approvals include Department Head, Finance, Procurement, Security, and Legal.\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Department Head\", \"Finance\", \"Procurement\", \"Security\", \"Legal\"], \"proposed_risk_flags\": [\"existing_tool_overlap\", \"security_review_required\", \"legal_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Sarah Lee is in the Marketing department with David Chen as Department Head.\"}, {\"call_id\": \"T2\", \"finding\": \"Catalog shows PixelCraft Pro (65 seats, company-wide) and CreativeSuite (40 seats, Marketing) in the same category.\"}, {\"call_id\": \"T3\", \"finding\": \"Vendor BrandBoard is new with security status Pending and legal terms status Draft.\"}, {\"call_id\": \"T4\", \"finding\": \"Vendor risk service shows BrandBoard has not completed security review (last_review_date: null).\"}, {\"call_id\": \"T5\", \"finding\": \"Marketing department has $15,000 available budget, and the $12,000 request is within budget.\"}, {\"call_id\": \"T6\", \"finding\": \"No prior purchases exist for BrandBoard in Marketing.\"}, {\"call_id\": \"T7\", \"finding\": \"Policy evaluation requires Department Head, Finance, Procurement, Security, and Legal approvals.\"}]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 561,
+   "prompt_token_count": 3543
+  }
+ }
+}

@@ -1,0 +1,39 @@
+{
+ "label": "single.turn2",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 43761.3,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "department": "Marketing",
+         "annual_cost_usd": 12000
+        },
+        "name": "check_budget"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "department": "Marketing",
+         "vendor_name": "BrandBoard",
+         "request_id": "REQ-1002"
+        },
+        "name": "get_purchase_history"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 627,
+   "prompt_token_count": 3381
+  }
+ }
+}

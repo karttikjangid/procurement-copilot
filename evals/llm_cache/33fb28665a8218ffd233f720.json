@@ -1,0 +1,23 @@
+{
+ "label": "staged.analyst",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 62658.2,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"no_existing_tool\", \"questions_for_requester\": [], \"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $1,000 annually for 5 users. The requester is Noah Williams in the Finance department, which has $29,000 available in its software budget. The vendor QuietNote is approved with current security and legal status (reviewed 2026-05-01, valid for 365 days). No existing tool overlap was found in the catalog or purchase history. The request meets all budget and vendor compliance requirements.\", \"risk_flags\": [], \"approval_threshold\": \"Manager\", \"approval_threshold_reason\": \"Annual cost of $1,000 falls within the $1,000 or less threshold requiring only Manager approval.\", \"evidence_claims\": [{\"call_id\": \"T1\", \"claim\": \"Requester Noah Williams (E004) is in the Finance department with manager Priya Shah (E006).\"}, {\"call_id\": \"T2\", \"claim\": \"Finance department has $29,000 available software budget; requested cost of $1,000 is within budget.\"}, {\"call_id\": \"T3\", \"claim\": \"No existing tool matches the requested product QuietNote Captions Teams in the software catalog.\"}, {\"call_id\": \"T4\", \"claim\": \"No prior purchases or open requests exist for vendor QuietNote in the Finance department.\"}, {\"call_id\": \"T5\", \"claim\": \"Vendor QuietNote (V900) has Approved procurement, security, and legal status.\"}, {\"call_id\": \"T6\", \"claim\": \"Vendor QuietNote has low risk level, security review approved as of 2026-05-01, and does not process personal data or store data outside the region.\"}]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 444,
+   "prompt_token_count": 2573
+  }
+ }
+}

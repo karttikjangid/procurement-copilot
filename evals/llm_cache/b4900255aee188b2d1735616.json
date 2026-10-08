@@ -1,0 +1,23 @@
+{
+ "label": "staged.analyst",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 32984.2,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": true, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"existing_tool_overlap\", \"questions_for_requester\": [], \"summary\": \"The request is for a SignFlow Add-on to provide three additional signing identities for Finance's quarter-end vendor agreements. The total annual cost is $800, which is within the Finance department's available software budget of $29,000. The vendor SignFlow is already approved with a current security assessment (reviewed 2026-06-20, valid for 365 days) and approved legal terms. However, the catalog shows an existing company-wide SignFlow agreement covering 45 seats for $16,000, and the requester already has an open request for a SignFlow Training Pack. This indicates the existing company-wide license should be leveraged rather than purchasing a new add-on.\", \"risk_flags\": [\"existing_tool_overlap\"]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 219,
+   "prompt_token_count": 2875
+  }
+ }
+}

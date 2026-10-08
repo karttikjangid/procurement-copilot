@@ -1,0 +1,39 @@
+{
+ "label": "single.turn2",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 58568.8,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "department": "Customer Success",
+         "annual_cost_usd": 6000
+        },
+        "name": "check_budget"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "department": "Customer Success",
+         "vendor_name": "NeuralDesk",
+         "request_id": "REQ-1004"
+        },
+        "name": "get_purchase_history"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 718,
+   "prompt_token_count": 3348
+  }
+ }
+}

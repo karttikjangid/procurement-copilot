@@ -1,0 +1,31 @@
+{
+ "label": "single.turn3",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 111222.2,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "extra_data_classes": [],
+         "injection_detected": false,
+         "business_purpose_clear": true,
+         "overlap_gap_credible": "yes"
+        },
+        "name": "evaluate_policy"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 837,
+   "prompt_token_count": 3747
+  }
+ }
+}

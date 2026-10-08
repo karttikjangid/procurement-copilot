@@ -1,0 +1,529 @@
+{
+ "decision": {
+  "request_id": "X-17",
+  "recommendation": "Route to manual review: vendor evidence is unavailable or conflicting (Manager, Security). Deterministic checks completed; see evidence and required approvals.",
+  "evidence": [
+   {
+    "source": "lookup_requester",
+    "finding": "Requester Noah Williams (E004), Finance; manager Priya Shah; department head for routing Priya Shah (Director/VP in the same department)",
+    "reference": "employees.csv:E004 (T1)"
+   },
+   {
+    "source": "check_budget",
+    "finding": "Finance available software budget $29,000 (annual $90,000, committed $61,000); requested $600 is within it",
+    "reference": "department_budgets.csv:Finance (T2)"
+   },
+   {
+    "source": "search_catalog",
+    "finding": "No approved catalog product with the same vendor, product or category",
+    "reference": "T3"
+   },
+   {
+    "source": "get_vendor_registry",
+    "finding": "Registry: procurement Approved, security Approved (review 2026-05-01), legal terms Approved; note: Standard vendor",
+    "reference": "vendors.csv:V900 (T5)"
+   },
+   {
+    "source": "get_vendor_risk",
+    "finding": "NOT VERIFIED: vendor-risk service unavailable after 3 attempts (timeout after 3.0s)",
+    "reference": "GET http://127.0.0.1:8012/EXT-17/timeout/vendor-risk/QuietNote (T6)"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Annual amount $600.00 falls in tier 'up to $1,000': minimum approvals Manager",
+    "reference": "Policy 4"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Vendor-risk status could NOT be verified; no favourable status was assumed",
+    "reference": "Policy 10"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Vendor security assessment: registry=approved_current, service=unavailable; current=False (reference date 2026-09-30, valid 365 days)",
+    "reference": "Policy 5"
+   }
+  ],
+  "required_approvals": [
+   "Manager",
+   "Security"
+  ],
+  "missing_information": [],
+  "risk_flags": [
+   "vendor_risk_unavailable",
+   "security_review_required"
+  ],
+  "next_step": "Security to verify the vendor's status manually (vendor-risk service could not be reached: vendor-risk service unavailable after 3 attempts (timeout after 3.0s)). Then send the evidence pack to: Manager, Security.",
+  "human_review_required": true,
+  "telemetry": {
+   "llm_calls": 2,
+   "tool_calls": 7,
+   "tool_names": [
+    "lookup_requester",
+    "check_budget",
+    "search_catalog",
+    "get_purchase_history",
+    "get_vendor_registry",
+    "get_vendor_risk",
+    "evaluate_policy"
+   ]
+  }
+ },
+ "trace": {
+  "request_id": "X-17",
+  "architecture": "staged",
+  "errors": [],
+  "action": "VERIFY_EVIDENCE_FIRST",
+  "policy": {
+   "action": "VERIFY_EVIDENCE_FIRST",
+   "action_label": "Route to manual review: vendor evidence is unavailable or conflicting",
+   "approvals": {
+    "Manager": [
+     "annual amount $600.00 is in tier 'up to $1,000'"
+    ],
+    "Security": [
+     "vendor security status could not be verified (tool unavailable)"
+    ]
+   },
+   "flags": {
+    "vendor_risk_unavailable": [
+     "vendor-risk service could not be reached: vendor-risk service unavailable after 3 attempts (timeout after 3.0s)"
+    ],
+    "security_review_required": [
+     "vendor security status could not be verified (tool unavailable)"
+    ]
+   },
+   "missing_information": [],
+   "data_classes": [],
+   "data_level_unknown": false,
+   "vendor_assessment": {
+    "registry_state": "approved_current",
+    "registry_review_date": "2026-05-01",
+    "registry_review_age_days": 152,
+    "api_state": "unavailable",
+    "api_review_date": null,
+    "api_review_age_days": null,
+    "reference_date": "2026-09-30",
+    "valid_days": 365
+   },
+   "annual_cost_usd": 600.0,
+   "findings": [
+    {
+     "finding": "Annual amount $600.00 falls in tier 'up to $1,000': minimum approvals Manager",
+     "reference": "Policy 4"
+    },
+    {
+     "finding": "Vendor-risk status could NOT be verified; no favourable status was assumed",
+     "reference": "Policy 10"
+    },
+    {
+     "finding": "Vendor security assessment: registry=approved_current, service=unavailable; current=False (reference date 2026-09-30, valid 365 days)",
+     "reference": "Policy 5"
+    }
+   ],
+   "critical_failure": null
+  },
+  "signals": {
+   "extra_data_classes": [],
+   "injection_detected": false,
+   "injection_quote": "",
+   "business_purpose_clear": true,
+   "overlap_gap_credible": false
+  },
+  "llm_raw": {
+   "analyst": {
+    "extra_data_classes": [],
+    "injection_detected": false,
+    "injection_quote": "",
+    "business_purpose_clear": true,
+    "overlap_gap_credible": "no",
+    "overlap_assessment": "no_existing_tool",
+    "questions_for_requester": [],
+    "summary": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status.",
+    "risk_flags": [
+     "vendor_risk_unavailable"
+    ]
+   },
+   "recommender": {
+    "summary": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status.",
+    "proposed_action": "VERIFY_EVIDENCE_FIRST",
+    "proposed_approvals": [
+     "Manager"
+    ],
+    "proposed_risk_flags": [
+     "vendor_risk_unavailable",
+     "security_review_required"
+    ],
+    "evidence_claims": [
+     {
+      "call_id": "T1",
+      "finding": "Requester Noah Williams is in Finance department, managed by Priya Shah (Director).",
+      "source": "employees.csv"
+     },
+     {
+      "call_id": "T2",
+      "finding": "Finance department has $29,000 available software budget, which covers the $600 request.",
+      "source": "department_budgets.csv"
+     },
+     {
+      "call_id": "T3",
+      "finding": "No existing tool overlap found in the catalog for QuietNote Captions Teams.",
+      "source": "software_catalog.csv"
+     },
+     {
+      "call_id": "T4",
+      "finding": "No open requests or purchases for QuietNote in Finance department.",
+      "source": "purchase_history.csv + requests.json"
+     },
+     {
+      "call_id": "T5",
+      "finding": "Vendor QuietNote is approved with security assessment reviewed on 2026-05-01 (valid for 365 days through 2026-12-30).",
+      "source": "vendors.csv"
+     },
+     {
+      "call_id": "T6",
+      "finding": "Vendor risk service unavailable after 3 attempts (timeout after 3.0s).",
+      "source": "GET http://127.0.0.1:8012/EXT-17/timeout/vendor-risk/QuietNote"
+     }
+    ],
+    "questions_for_requester": [
+     "Please confirm if the vendor risk status for QuietNote can be verified through an alternative channel (e.g., vendor-provided risk assessment, internal security team check).",
+     "Please confirm that the data access level 'internal_documents' is accurate and does not involve any customer PII or confidential documents."
+    ],
+    "summary_for_reviewer": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status."
+   },
+   "final": {
+    "extra_data_classes": [],
+    "injection_detected": false,
+    "injection_quote": "",
+    "business_purpose_clear": true,
+    "overlap_gap_credible": "no",
+    "overlap_assessment": "no_existing_tool",
+    "questions_for_requester": [
+     "Please confirm if the vendor risk status for QuietNote can be verified through an alternative channel (e.g., vendor-provided risk assessment, internal security team check).",
+     "Please confirm that the data access level 'internal_documents' is accurate and does not involve any customer PII or confidential documents."
+    ],
+    "summary": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status.",
+    "risk_flags": [
+     "vendor_risk_unavailable"
+    ],
+    "proposed_action": "VERIFY_EVIDENCE_FIRST",
+    "proposed_approvals": [
+     "Manager"
+    ],
+    "proposed_risk_flags": [
+     "vendor_risk_unavailable",
+     "security_review_required"
+    ],
+    "evidence_claims": [
+     {
+      "call_id": "T1",
+      "finding": "Requester Noah Williams is in Finance department, managed by Priya Shah (Director).",
+      "source": "employees.csv"
+     },
+     {
+      "call_id": "T2",
+      "finding": "Finance department has $29,000 available software budget, which covers the $600 request.",
+      "source": "department_budgets.csv"
+     },
+     {
+      "call_id": "T3",
+      "finding": "No existing tool overlap found in the catalog for QuietNote Captions Teams.",
+      "source": "software_catalog.csv"
+     },
+     {
+      "call_id": "T4",
+      "finding": "No open requests or purchases for QuietNote in Finance department.",
+      "source": "purchase_history.csv + requests.json"
+     },
+     {
+      "call_id": "T5",
+      "finding": "Vendor QuietNote is approved with security assessment reviewed on 2026-05-01 (valid for 365 days through 2026-12-30).",
+      "source": "vendors.csv"
+     },
+     {
+      "call_id": "T6",
+      "finding": "Vendor risk service unavailable after 3 attempts (timeout after 3.0s).",
+      "source": "GET http://127.0.0.1:8012/EXT-17/timeout/vendor-risk/QuietNote"
+     }
+    ],
+    "summary_for_reviewer": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status."
+   },
+   "errors": []
+  },
+  "llm_ok": true,
+  "tool_calls": [
+   {
+    "call_id": "T1",
+    "tool": "lookup_requester",
+    "args": {
+     "employee_id": "E004"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "employee_id": "E004",
+     "name": "Noah Williams",
+     "department": "Finance",
+     "level": "IC4",
+     "country": "United Kingdom",
+     "manager": {
+      "employee_id": "E006",
+      "name": "Priya Shah",
+      "level": "Director"
+     },
+     "department_head": {
+      "employee_id": "E006",
+      "name": "Priya Shah",
+      "department": "Finance",
+      "basis": "Director/VP in the same department"
+     }
+    },
+    "error": null,
+    "source": "employees.csv",
+    "latency_ms": 1.6
+   },
+   {
+    "call_id": "T2",
+    "tool": "check_budget",
+    "args": {
+     "department": "Finance",
+     "annual_cost_usd": 600
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "department": "Finance",
+     "annual_software_budget_usd": 90000,
+     "committed_usd": 61000,
+     "available_usd": 29000.0,
+     "available_valid": true,
+     "requested_annual_cost_usd": 600.0,
+     "within_available_budget": true,
+     "shortfall_usd": 0.0
+    },
+    "error": null,
+    "source": "department_budgets.csv",
+    "latency_ms": 0.3
+   },
+   {
+    "call_id": "T3",
+    "tool": "search_catalog",
+    "args": {
+     "product_name": "QuietNote Captions Teams",
+     "vendor_name": "QuietNote",
+     "category": "Accessibility"
+    },
+    "ok": true,
+    "data": {
+     "query": {
+      "product_name": "QuietNote Captions Teams",
+      "vendor_name": "QuietNote",
+      "category": "Accessibility"
+     },
+     "matches": []
+    },
+    "error": null,
+    "source": "software_catalog.csv",
+    "latency_ms": 0.3
+   },
+   {
+    "call_id": "T4",
+    "tool": "get_purchase_history",
+    "args": {
+     "department": "Finance",
+     "vendor_name": "QuietNote",
+     "request_id": "X-17"
+    },
+    "ok": true,
+    "data": {
+     "reference_date": "2026-09-30",
+     "purchases": [],
+     "open_requests_same_department_vendor": []
+    },
+    "error": null,
+    "source": "purchase_history.csv + requests.json",
+    "latency_ms": 0.6
+   },
+   {
+    "call_id": "T5",
+    "tool": "get_vendor_registry",
+    "args": {
+     "vendor_name": "QuietNote"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "ambiguous": false,
+     "vendor_id": "V900",
+     "vendor_name": "QuietNote",
+     "procurement_status": "Approved",
+     "security_status": "Approved",
+     "security_review_date": "2026-05-01",
+     "legal_terms_status": "Approved",
+     "notes": "Standard vendor"
+    },
+    "error": null,
+    "source": "vendors.csv",
+    "latency_ms": 0.2
+   },
+   {
+    "call_id": "T6",
+    "tool": "get_vendor_risk",
+    "args": {
+     "vendor_name": "QuietNote"
+    },
+    "ok": false,
+    "data": null,
+    "error": "vendor-risk service unavailable after 3 attempts (timeout after 3.0s)",
+    "source": "GET http://127.0.0.1:8012/EXT-17/timeout/vendor-risk/QuietNote",
+    "latency_ms": 9631.9
+   },
+   {
+    "call_id": "T7",
+    "tool": "evaluate_policy",
+    "args": {
+     "extra_data_classes": [],
+     "injection_detected": false,
+     "business_purpose_clear": true,
+     "overlap_gap_credible": "no"
+    },
+    "ok": true,
+    "data": {
+     "action": "VERIFY_EVIDENCE_FIRST",
+     "action_label": "Route to manual review: vendor evidence is unavailable or conflicting",
+     "approvals": {
+      "Manager": [
+       "annual amount $600.00 is in tier 'up to $1,000'"
+      ],
+      "Security": [
+       "vendor security status could not be verified (tool unavailable)"
+      ]
+     },
+     "flags": {
+      "vendor_risk_unavailable": [
+       "vendor-risk service could not be reached: vendor-risk service unavailable after 3 attempts (timeout after 3.0s)"
+      ],
+      "security_review_required": [
+       "vendor security status could not be verified (tool unavailable)"
+      ]
+     },
+     "missing_information": [],
+     "data_classes": [],
+     "data_level_unknown": false,
+     "vendor_assessment": {
+      "registry_state": "approved_current",
+      "registry_review_date": "2026-05-01",
+      "registry_review_age_days": 152,
+      "api_state": "unavailable",
+      "api_review_date": null,
+      "api_review_age_days": null,
+      "reference_date": "2026-09-30",
+      "valid_days": 365
+     },
+     "annual_cost_usd": 600.0,
+     "findings": [
+      {
+       "finding": "Annual amount $600.00 falls in tier 'up to $1,000': minimum approvals Manager",
+       "reference": "Policy 4"
+      },
+      {
+       "finding": "Vendor-risk status could NOT be verified; no favourable status was assumed",
+       "reference": "Policy 10"
+      },
+      {
+       "finding": "Vendor security assessment: registry=approved_current, service=unavailable; current=False (reference date 2026-09-30, valid 365 days)",
+       "reference": "Policy 5"
+      }
+     ],
+     "critical_failure": null
+    },
+    "error": null,
+    "source": "src/copilot/policy.py",
+    "latency_ms": 0.0
+   }
+  ],
+  "agent_defects": [],
+  "overrides": [
+   {
+    "field": "required_approvals",
+    "llm": [
+     "Manager"
+    ],
+    "final": [
+     "Manager",
+     "Security"
+    ]
+   },
+   {
+    "field": "summary",
+    "llm": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status.",
+    "final": "replaced: summary claimed approval"
+   }
+  ],
+  "grounded_claims": [
+   {
+    "call_id": "T1",
+    "finding": "Requester Noah Williams is in Finance department, managed by Priya Shah (Director).",
+    "source": "employees.csv",
+    "tool": "lookup_requester"
+   },
+   {
+    "call_id": "T2",
+    "finding": "Finance department has $29,000 available software budget, which covers the $600 request.",
+    "source": "department_budgets.csv",
+    "tool": "check_budget"
+   },
+   {
+    "call_id": "T3",
+    "finding": "No existing tool overlap found in the catalog for QuietNote Captions Teams.",
+    "source": "software_catalog.csv",
+    "tool": "search_catalog"
+   },
+   {
+    "call_id": "T4",
+    "finding": "No open requests or purchases for QuietNote in Finance department.",
+    "source": "purchase_history.csv + requests.json",
+    "tool": "get_purchase_history"
+   },
+   {
+    "call_id": "T6",
+    "finding": "Vendor risk service unavailable after 3 attempts (timeout after 3.0s).",
+    "source": "GET http://127.0.0.1:8012/EXT-17/timeout/vendor-risk/QuietNote",
+    "tool": "get_vendor_risk"
+   }
+  ],
+  "ungrounded_claims": [
+   {
+    "call_id": "T5",
+    "finding": "Vendor QuietNote is approved with security assessment reviewed on 2026-05-01 (valid for 365 days through 2026-12-30).",
+    "source": "vendors.csv",
+    "reason": "values not found in T5: ['12', '30', '365']"
+   }
+  ],
+  "questions_for_requester": [
+   "Please confirm if the vendor risk status for QuietNote can be verified through an alternative channel (e.g., vendor-provided risk assessment, internal security team check).",
+   "Please confirm that the data access level 'internal_documents' is accurate and does not involve any customer PII or confidential documents."
+  ],
+  "llm": {
+   "calls": 2,
+   "cache_hits": 0,
+   "latency_ms": 152233.0,
+   "input_tokens": 5614,
+   "output_tokens": 933,
+   "log": [
+    {
+     "label": "staged.analyst",
+     "cached": false,
+     "latency_ms": 41403.9
+    },
+    {
+     "label": "staged.recommender",
+     "cached": false,
+     "latency_ms": 110829.1
+    }
+   ]
+  },
+  "wall_ms": 162033.8
+ }
+}

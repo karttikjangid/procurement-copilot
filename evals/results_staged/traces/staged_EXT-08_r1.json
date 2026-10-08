@@ -1,0 +1,533 @@
+{
+ "decision": {
+  "request_id": "X-08",
+  "recommendation": "Route to the required human approvers (Manager, Security). Deterministic checks completed; see evidence and required approvals.",
+  "evidence": [
+   {
+    "source": "lookup_requester",
+    "finding": "Requester Noah Williams (E004), Finance; manager Priya Shah; department head for routing Priya Shah (Director/VP in the same department)",
+    "reference": "employees.csv:E004 (T1)"
+   },
+   {
+    "source": "check_budget",
+    "finding": "Finance available software budget $29,000 (annual $90,000, committed $61,000); requested $500 is within it",
+    "reference": "department_budgets.csv:Finance (T2)"
+   },
+   {
+    "source": "search_catalog",
+    "finding": "No approved catalog product with the same vendor, product or category",
+    "reference": "T3"
+   },
+   {
+    "source": "get_vendor_registry",
+    "finding": "Registry: procurement Approved, security Approved (review 2025-09-29), legal terms Approved; note: Standard vendor",
+    "reference": "vendors.csv:V900 (T5)"
+   },
+   {
+    "source": "get_vendor_risk",
+    "finding": "Vendor-risk service: review approved (last 2025-09-29), risk low, personal data False, stores outside region False; note: Current assessment.",
+    "reference": "GET http://127.0.0.1:8012/EXT-08/none/vendor-risk/QuietNote (T6)"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Annual amount $500.00 falls in tier 'up to $1,000': minimum approvals Manager",
+    "reference": "Policy 4"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Vendor security assessment: registry=expired, service=expired; current=False (reference date 2026-09-30, valid 365 days)",
+    "reference": "Policy 5"
+   }
+  ],
+  "required_approvals": [
+   "Manager",
+   "Security"
+  ],
+  "missing_information": [],
+  "risk_flags": [
+   "vendor_review_expired",
+   "security_review_required"
+  ],
+  "next_step": "Send the evidence pack to: Manager, Security. Each approver decides; the copilot does not approve or purchase.",
+  "human_review_required": true,
+  "telemetry": {
+   "llm_calls": 2,
+   "tool_calls": 7,
+   "tool_names": [
+    "lookup_requester",
+    "check_budget",
+    "search_catalog",
+    "get_purchase_history",
+    "get_vendor_registry",
+    "get_vendor_risk",
+    "evaluate_policy"
+   ]
+  }
+ },
+ "trace": {
+  "request_id": "X-08",
+  "architecture": "staged",
+  "errors": [],
+  "action": "ROUTE_FOR_APPROVAL",
+  "policy": {
+   "action": "ROUTE_FOR_APPROVAL",
+   "action_label": "Route to the required human approvers",
+   "approvals": {
+    "Manager": [
+     "annual amount $500.00 is in tier 'up to $1,000'"
+    ],
+    "Security": [
+     "vendor security assessment expired"
+    ]
+   },
+   "flags": {
+    "vendor_review_expired": [
+     "latest security review is 366 days old (limit 365) as of 2026-09-30"
+    ],
+    "security_review_required": [
+     "vendor security assessment expired"
+    ]
+   },
+   "missing_information": [],
+   "data_classes": [],
+   "data_level_unknown": false,
+   "vendor_assessment": {
+    "registry_state": "expired",
+    "registry_review_date": "2025-09-29",
+    "registry_review_age_days": 366,
+    "api_state": "expired",
+    "api_review_date": "2025-09-29",
+    "api_review_age_days": 366,
+    "reference_date": "2026-09-30",
+    "valid_days": 365
+   },
+   "annual_cost_usd": 500.0,
+   "findings": [
+    {
+     "finding": "Annual amount $500.00 falls in tier 'up to $1,000': minimum approvals Manager",
+     "reference": "Policy 4"
+    },
+    {
+     "finding": "Vendor security assessment: registry=expired, service=expired; current=False (reference date 2026-09-30, valid 365 days)",
+     "reference": "Policy 5"
+    }
+   ],
+   "critical_failure": null
+  },
+  "signals": {
+   "extra_data_classes": [],
+   "injection_detected": false,
+   "injection_quote": "",
+   "business_purpose_clear": true,
+   "overlap_gap_credible": false
+  },
+  "llm_raw": {
+   "analyst": {
+    "extra_data_classes": [],
+    "injection_detected": false,
+    "injection_quote": "",
+    "business_purpose_clear": true,
+    "overlap_gap_credible": "no",
+    "overlap_assessment": "no_existing_tool",
+    "questions_for_requester": [],
+    "summary": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The requester is Noah Williams in the Finance department, which has $29,000 available in its software budget, so the cost is well within budget. The vendor QuietNote is approved with current security and legal status (reviewed 2025-09-29, valid for 365 days through 2026-09-29). No existing tool in the catalog or purchase history overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level."
+   },
+   "recommender": {
+    "summary": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The vendor QuietNote is approved but its security assessment expired on 2026-09-30 (last reviewed 2025-09-29, valid for 365 days). No existing tool overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level, but the expired vendor security assessment requires a Security review before approval.",
+    "proposed_action": "ROUTE_FOR_APPROVAL",
+    "proposed_approvals": [
+     "Manager"
+    ],
+    "proposed_risk_flags": [
+     "vendor_review_expired",
+     "security_review_required"
+    ],
+    "evidence_claims": [
+     {
+      "call_id": "T1",
+      "finding": "Requester is Noah Williams in Finance department, manager is Priya Shah (Director).",
+      "reference": "Policy 1"
+     },
+     {
+      "call_id": "T2",
+      "finding": "Finance department has $29,000 available software budget; requested cost is $500, within budget.",
+      "reference": "Policy 2"
+     },
+     {
+      "call_id": "T3",
+      "finding": "No existing tool in catalog matches the requested product or category.",
+      "reference": "Policy 3"
+     },
+     {
+      "call_id": "T4",
+      "finding": "No prior purchases or open requests for QuietNote in Finance department.",
+      "reference": "Policy 3"
+     },
+     {
+      "call_id": "T5",
+      "finding": "Vendor QuietNote is approved in registry with security status 'Approved' as of 2025-09-29.",
+      "reference": "Policy 5"
+     },
+     {
+      "call_id": "T6",
+      "finding": "Vendor risk assessment shows 'approved' status with last review date 2025-09-29.",
+      "reference": "Policy 5"
+     },
+     {
+      "call_id": "T7",
+      "finding": "Policy engine flags vendor security assessment expired (366 days old as of 2026-09-30, valid for 365 days).",
+      "reference": "Policy 5"
+     }
+    ],
+    "questions_for_requester": [
+     "Please confirm that the vendor security assessment for QuietNote will be renewed before the purchase is approved.",
+     "Please confirm that the requested integrations (none listed) are still valid for the new purchase."
+    ],
+    "summary_for_reviewer": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The vendor QuietNote is approved but its security assessment expired on 2026-09-30 (last reviewed 2025-09-29, valid for 365 days). No existing tool overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level, but the expired vendor security assessment requires a Security review before approval."
+   },
+   "final": {
+    "extra_data_classes": [],
+    "injection_detected": false,
+    "injection_quote": "",
+    "business_purpose_clear": true,
+    "overlap_gap_credible": "no",
+    "overlap_assessment": "no_existing_tool",
+    "questions_for_requester": [
+     "Please confirm that the vendor security assessment for QuietNote will be renewed before the purchase is approved.",
+     "Please confirm that the requested integrations (none listed) are still valid for the new purchase."
+    ],
+    "summary": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The vendor QuietNote is approved but its security assessment expired on 2026-09-30 (last reviewed 2025-09-29, valid for 365 days). No existing tool overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level, but the expired vendor security assessment requires a Security review before approval.",
+    "proposed_action": "ROUTE_FOR_APPROVAL",
+    "proposed_approvals": [
+     "Manager"
+    ],
+    "proposed_risk_flags": [
+     "vendor_review_expired",
+     "security_review_required"
+    ],
+    "evidence_claims": [
+     {
+      "call_id": "T1",
+      "finding": "Requester is Noah Williams in Finance department, manager is Priya Shah (Director).",
+      "reference": "Policy 1"
+     },
+     {
+      "call_id": "T2",
+      "finding": "Finance department has $29,000 available software budget; requested cost is $500, within budget.",
+      "reference": "Policy 2"
+     },
+     {
+      "call_id": "T3",
+      "finding": "No existing tool in catalog matches the requested product or category.",
+      "reference": "Policy 3"
+     },
+     {
+      "call_id": "T4",
+      "finding": "No prior purchases or open requests for QuietNote in Finance department.",
+      "reference": "Policy 3"
+     },
+     {
+      "call_id": "T5",
+      "finding": "Vendor QuietNote is approved in registry with security status 'Approved' as of 2025-09-29.",
+      "reference": "Policy 5"
+     },
+     {
+      "call_id": "T6",
+      "finding": "Vendor risk assessment shows 'approved' status with last review date 2025-09-29.",
+      "reference": "Policy 5"
+     },
+     {
+      "call_id": "T7",
+      "finding": "Policy engine flags vendor security assessment expired (366 days old as of 2026-09-30, valid for 365 days).",
+      "reference": "Policy 5"
+     }
+    ],
+    "summary_for_reviewer": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The vendor QuietNote is approved but its security assessment expired on 2026-09-30 (last reviewed 2025-09-29, valid for 365 days). No existing tool overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level, but the expired vendor security assessment requires a Security review before approval."
+   },
+   "errors": []
+  },
+  "llm_ok": true,
+  "tool_calls": [
+   {
+    "call_id": "T1",
+    "tool": "lookup_requester",
+    "args": {
+     "employee_id": "E004"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "employee_id": "E004",
+     "name": "Noah Williams",
+     "department": "Finance",
+     "level": "IC4",
+     "country": "United Kingdom",
+     "manager": {
+      "employee_id": "E006",
+      "name": "Priya Shah",
+      "level": "Director"
+     },
+     "department_head": {
+      "employee_id": "E006",
+      "name": "Priya Shah",
+      "department": "Finance",
+      "basis": "Director/VP in the same department"
+     }
+    },
+    "error": null,
+    "source": "employees.csv",
+    "latency_ms": 0.3
+   },
+   {
+    "call_id": "T2",
+    "tool": "check_budget",
+    "args": {
+     "department": "Finance",
+     "annual_cost_usd": 500
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "department": "Finance",
+     "annual_software_budget_usd": 90000,
+     "committed_usd": 61000,
+     "available_usd": 29000.0,
+     "available_valid": true,
+     "requested_annual_cost_usd": 500.0,
+     "within_available_budget": true,
+     "shortfall_usd": 0.0
+    },
+    "error": null,
+    "source": "department_budgets.csv",
+    "latency_ms": 0.2
+   },
+   {
+    "call_id": "T3",
+    "tool": "search_catalog",
+    "args": {
+     "product_name": "QuietNote Captions Teams",
+     "vendor_name": "QuietNote",
+     "category": "Accessibility"
+    },
+    "ok": true,
+    "data": {
+     "query": {
+      "product_name": "QuietNote Captions Teams",
+      "vendor_name": "QuietNote",
+      "category": "Accessibility"
+     },
+     "matches": []
+    },
+    "error": null,
+    "source": "software_catalog.csv",
+    "latency_ms": 0.2
+   },
+   {
+    "call_id": "T4",
+    "tool": "get_purchase_history",
+    "args": {
+     "department": "Finance",
+     "vendor_name": "QuietNote",
+     "request_id": "X-08"
+    },
+    "ok": true,
+    "data": {
+     "reference_date": "2026-09-30",
+     "purchases": [],
+     "open_requests_same_department_vendor": []
+    },
+    "error": null,
+    "source": "purchase_history.csv + requests.json",
+    "latency_ms": 0.7
+   },
+   {
+    "call_id": "T5",
+    "tool": "get_vendor_registry",
+    "args": {
+     "vendor_name": "QuietNote"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "ambiguous": false,
+     "vendor_id": "V900",
+     "vendor_name": "QuietNote",
+     "procurement_status": "Approved",
+     "security_status": "Approved",
+     "security_review_date": "2025-09-29",
+     "legal_terms_status": "Approved",
+     "notes": "Standard vendor"
+    },
+    "error": null,
+    "source": "vendors.csv",
+    "latency_ms": 0.3
+   },
+   {
+    "call_id": "T6",
+    "tool": "get_vendor_risk",
+    "args": {
+     "vendor_name": "QuietNote"
+    },
+    "ok": true,
+    "data": {
+     "record_found": true,
+     "vendor_name": "QuietNote",
+     "risk_level": "low",
+     "security_review_status": "approved",
+     "last_review_date": "2025-09-29",
+     "processes_personal_data": false,
+     "stores_data_outside_region": false,
+     "notes": "Current assessment."
+    },
+    "error": null,
+    "source": "GET http://127.0.0.1:8012/EXT-08/none/vendor-risk/QuietNote",
+    "latency_ms": 2.0
+   },
+   {
+    "call_id": "T7",
+    "tool": "evaluate_policy",
+    "args": {
+     "extra_data_classes": [],
+     "injection_detected": false,
+     "business_purpose_clear": true,
+     "overlap_gap_credible": "no"
+    },
+    "ok": true,
+    "data": {
+     "action": "ROUTE_FOR_APPROVAL",
+     "action_label": "Route to the required human approvers",
+     "approvals": {
+      "Manager": [
+       "annual amount $500.00 is in tier 'up to $1,000'"
+      ],
+      "Security": [
+       "vendor security assessment expired"
+      ]
+     },
+     "flags": {
+      "vendor_review_expired": [
+       "latest security review is 366 days old (limit 365) as of 2026-09-30"
+      ],
+      "security_review_required": [
+       "vendor security assessment expired"
+      ]
+     },
+     "missing_information": [],
+     "data_classes": [],
+     "data_level_unknown": false,
+     "vendor_assessment": {
+      "registry_state": "expired",
+      "registry_review_date": "2025-09-29",
+      "registry_review_age_days": 366,
+      "api_state": "expired",
+      "api_review_date": "2025-09-29",
+      "api_review_age_days": 366,
+      "reference_date": "2026-09-30",
+      "valid_days": 365
+     },
+     "annual_cost_usd": 500.0,
+     "findings": [
+      {
+       "finding": "Annual amount $500.00 falls in tier 'up to $1,000': minimum approvals Manager",
+       "reference": "Policy 4"
+      },
+      {
+       "finding": "Vendor security assessment: registry=expired, service=expired; current=False (reference date 2026-09-30, valid 365 days)",
+       "reference": "Policy 5"
+      }
+     ],
+     "critical_failure": null
+    },
+    "error": null,
+    "source": "src/copilot/policy.py",
+    "latency_ms": 0.0
+   }
+  ],
+  "agent_defects": [],
+  "overrides": [
+   {
+    "field": "required_approvals",
+    "llm": [
+     "Manager"
+    ],
+    "final": [
+     "Manager",
+     "Security"
+    ]
+   },
+   {
+    "field": "summary",
+    "llm": "The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The vendor QuietNote is approved but its security assessment expired on 2026-09-30 (last reviewed 2025-09-29, valid for 365 days). No existing tool overlaps with this request. The business purpose is clear and meets accessibility needs. No additional approvals are required beyond the standard thresholds for this cost level, but the expired vendor security assessment requires a Security review before approval.",
+    "final": "replaced: summary claimed approval"
+   }
+  ],
+  "grounded_claims": [
+   {
+    "call_id": "T1",
+    "finding": "Requester is Noah Williams in Finance department, manager is Priya Shah (Director).",
+    "reference": "Policy 1",
+    "tool": "lookup_requester"
+   },
+   {
+    "call_id": "T2",
+    "finding": "Finance department has $29,000 available software budget; requested cost is $500, within budget.",
+    "reference": "Policy 2",
+    "tool": "check_budget"
+   },
+   {
+    "call_id": "T3",
+    "finding": "No existing tool in catalog matches the requested product or category.",
+    "reference": "Policy 3",
+    "tool": "search_catalog"
+   },
+   {
+    "call_id": "T4",
+    "finding": "No prior purchases or open requests for QuietNote in Finance department.",
+    "reference": "Policy 3",
+    "tool": "get_purchase_history"
+   },
+   {
+    "call_id": "T5",
+    "finding": "Vendor QuietNote is approved in registry with security status 'Approved' as of 2025-09-29.",
+    "reference": "Policy 5",
+    "tool": "get_vendor_registry"
+   },
+   {
+    "call_id": "T6",
+    "finding": "Vendor risk assessment shows 'approved' status with last review date 2025-09-29.",
+    "reference": "Policy 5",
+    "tool": "get_vendor_risk"
+   },
+   {
+    "call_id": "T7",
+    "finding": "Policy engine flags vendor security assessment expired (366 days old as of 2026-09-30, valid for 365 days).",
+    "reference": "Policy 5",
+    "tool": "evaluate_policy"
+   }
+  ],
+  "ungrounded_claims": [],
+  "questions_for_requester": [
+   "Please confirm that the requested integrations (none listed) are still valid for the new purchase."
+  ],
+  "llm": {
+   "calls": 2,
+   "cache_hits": 2,
+   "latency_ms": 107828.1,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "log": [
+    {
+     "label": "staged.analyst",
+     "cached": true,
+     "latency_ms": 28388.4
+    },
+    {
+     "label": "staged.recommender",
+     "cached": true,
+     "latency_ms": 79439.7
+    }
+   ]
+  },
+  "wall_ms": 5.6
+ }
+}

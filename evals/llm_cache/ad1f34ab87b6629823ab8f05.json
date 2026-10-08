@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 100593.7,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for BrandBoard Enterprise ($12,000/year, 25 users) in the Design & Creative category, justified by the need for fast campaign-template creation for non-designers. The Marketing department has sufficient budget ($15,000 available). However, the vendor (BrandBoard) is new with pending security and draft legal terms, and there are existing approved tools in the same category (PixelCraft Pro, CreativeSuite). A security review is required because the vendor's security assessment is not completed. A legal review is required because the vendor is new and the annual spend exceeds $10,000. The request overlaps with existing tools but may be justified if the existing tools cannot meet the specific use case for non-designers.\", \"proposed_action\": \"REVIEW_EXISTING_TOOL_FIRST\", \"proposed_approvals\": [\"Department Head\", \"Procurement\", \"Finance\"], \"proposed_risk_flags\": [\"security_review_required\", \"legal_review_required\", \"existing_tool_overlap\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Sarah Lee (E001) is in the Marketing department with David Chen as department head.\"}, {\"call_id\": \"T2\", \"finding\": \"Marketing department has $15,000 available budget; requested cost is $12,000, which is within budget.\"}, {\"call_id\": \"T3\", \"finding\": \"Catalog search found PixelCraft Pro (same_category, 65 seats, Company-wide) and CreativeSuite (same_category, 40 seats, Marketing) as existing approved tools.\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor BrandBoard is new with security status 'Pending' and legal terms status 'Draft'.\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows security_review_status 'not_completed' and processes personal data.\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine recommends action 'REVIEW_EXISTING_TOOL_FIRST' with required approvals from Department Head, Procurement, Finance, Security, and Legal.\"}], \"questions_for_requester\": [\"Please confirm that BrandBoard is not already in use by Marketing or any other department, and that the requested integrations (SSO) are compatible with the existing tools.\", \"Please clarify why the existing approved tools (PixelCraft Pro, CreativeSuite) cannot meet the stated need for fast campaign-template creation by non-designers.\"], \"summary_for_reviewer\": \"The request is for BrandBoard Enterprise ($12,000/year, 25 users) in the Design & Creative category, justified by the need for fast campaign-template creation for non-designers. The Marketing department has sufficient budget ($15,000 available). However, the vendor (BrandBoard) is new with pending security and draft legal terms, and there are existing approved tools in the same category (PixelCraft Pro, CreativeSuite). A security review is required because the vendor's security assessment is not completed. A legal review is required because the vendor is new and the annual spend exceeds $10,000. The request overlaps with existing tools but may be justified if the existing tools cannot meet the specific use case for non-designers.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 686,
+   "prompt_token_count": 3682
+  }
+ }
+}

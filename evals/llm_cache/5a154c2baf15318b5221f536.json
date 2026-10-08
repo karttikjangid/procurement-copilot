@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 110829.1,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status.\", \"proposed_action\": \"VERIFY_EVIDENCE_FIRST\", \"proposed_approvals\": [\"Manager\"], \"proposed_risk_flags\": [\"vendor_risk_unavailable\", \"security_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Noah Williams is in Finance department, managed by Priya Shah (Director).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Finance department has $29,000 available software budget, which covers the $600 request.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"No existing tool overlap found in the catalog for QuietNote Captions Teams.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"No open requests or purchases for QuietNote in Finance department.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote is approved with security assessment reviewed on 2026-05-01 (valid for 365 days through 2026-12-30).\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk service unavailable after 3 attempts (timeout after 3.0s).\", \"source\": \"GET http://127.0.0.1:8012/EXT-17/timeout/vendor-risk/QuietNote\"}], \"questions_for_requester\": [\"Please confirm if the vendor risk status for QuietNote can be verified through an alternative channel (e.g., vendor-provided risk assessment, internal security team check).\", \"Please confirm that the data access level 'internal_documents' is accurate and does not involve any customer PII or confidential documents.\"], \"summary_for_reviewer\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $600 annually for 5 users. The requester is Noah Williams in the Finance department, with a manager and department head of Priya Shah. The Finance department has $29,000 available in its software budget, which covers the $600 request. The vendor QuietNote is approved with a current security assessment (reviewed on 2026-05-01, valid for 365 days through 2026-12-30). No existing tool overlap was found in the catalog or purchase history. The vendor risk service is unavailable, which requires manual review to verify vendor risk status.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 711,
+   "prompt_token_count": 3115
+  }
+ }
+}

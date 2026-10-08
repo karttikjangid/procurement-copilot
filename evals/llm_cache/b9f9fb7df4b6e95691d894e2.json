@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 76665.4,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool costing $25,000.01 annually for 40 users in the Finance department. The budget check shows $29,000 available, so the cost is within budget. The vendor (QuietNote) is approved with a current security assessment (reviewed 2026-05-01, valid for 365 days). The catalog search found no existing tool overlap, and there is no purchase history for this vendor in the department. The business purpose is clear (captions for internal training videos).\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Department Head\", \"Finance\", \"CFO\", \"Procurement\"], \"proposed_risk_flags\": [\"security_review_required\", \"privacy_review_required\", \"legal_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Noah Williams is in the Finance department, managed by Director Priya Shah.\"}, {\"call_id\": \"T2\", \"finding\": \"Finance department has $29,000 available software budget; requested cost is $25,000.01, which is within budget.\"}, {\"call_id\": \"T3\", \"finding\": \"No existing tool in the catalog matches the requested product or category.\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests for QuietNote in the Finance department.\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote (V900) has an 'Approved' procurement and security status, with a security review date of 2026-05-01.\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor QuietNote has a 'low' risk level, security status 'approved', last review date 2026-05-01, and does not process personal data or store data outside the region.\"}, {\"call_id\": \"T7\", \"finding\": \"Request text/integrations indicate additional sensitive data: confidential_documents, credentials, customer_pii, employee_pii, production, source_code\"}], \"questions_for_requester\": [\"Confirm that the 40-user license count is accurate and that the $25,000.01 annual cost is fixed (not subject to future price changes).\", \"Confirm that the requested integrations list is complete (no future integrations needed).\", \"Confirm that the data access level of 'internal_documents' is accurate and does not need to be elevated to 'confidential_documents' or 'customer_pii'.\"], \"summary_for_reviewer\": \"The request is for QuietNote Captions Teams, an accessibility tool costing $25,000.01 annually for 40 users in the Finance department. The budget check shows $29,000 available, so the cost is within budget. The vendor (QuietNote) is approved with a current security assessment (reviewed 2026-05-01, valid for 365 days). The catalog search found no existing tool overlap, and there is no purchase history for this vendor in the department. The business purpose is clear (captions for internal training videos).\", \"critical_failure\": null, \"data_access_level\": \"internal_documents\", \"data_classes\": [\"confidential_documents\", \"credentials\", \"customer_pii\", \"employee_pii\", \"production\", \"source_code\"], \"approval_threshold\": \"Department Head + Finance + Procurement\", \"security_review_required\": true, \"privacy_review_required\": true, \"legal_review_required\": true, \"risk_flags\": [\"security_review_required\", \"privacy_review_required\", \"legal_review_required\"]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 797,
+   "prompt_token_count": 3738
+  }
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "label": "single.turn1",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 41197.7,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "employee_id": "E002"
+        },
+        "name": "lookup_requester"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "product_name": "CodeMate Teams Expansion",
+         "vendor_name": "CodeMate",
+         "category": "Developer AI"
+        },
+        "name": "search_catalog"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "vendor_name": "CodeMate"
+        },
+        "name": "get_vendor_registry"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "vendor_name": "CodeMate"
+        },
+        "name": "get_vendor_risk"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 550,
+   "prompt_token_count": 2565
+  }
+ }
+}

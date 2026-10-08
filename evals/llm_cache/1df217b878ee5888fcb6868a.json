@@ -1,0 +1,39 @@
+{
+ "label": "single.turn2",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 98413.8,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "department": "Engineering",
+         "annual_cost_usd": 24000
+        },
+        "name": "check_budget"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "department": "Engineering",
+         "vendor_name": "SignalWatch",
+         "request_id": "REQ-1007"
+        },
+        "name": "get_purchase_history"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 579,
+   "prompt_token_count": 3315
+  }
+ }
+}

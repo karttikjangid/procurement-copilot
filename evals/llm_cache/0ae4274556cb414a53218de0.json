@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 109074.4,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request to purchase NeuralDesk Support Assistant for 20 users at $6,000 annually is within the Customer Success department's available budget of $7,000. However, the vendor NeuralDesk already has an approved company-wide license (NeuralDesk Business) for 150 seats, and the purchase history shows an active purchase for Operations. This creates a significant overlap that should be reviewed before approving a new instance. Additionally, the request declares customer_pii access, which triggers privacy review requirements, and the vendor stores data outside the operating region, which may require additional legal review.\", \"proposed_action\": \"REVIEW_EXISTING_TOOL_FIRST\", \"proposed_approvals\": [\"Department Head\", \"Procurement\"], \"proposed_risk_flags\": [\"existing_tool_overlap\", \"security_review_required\", \"privacy_review_required\", \"legal_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Mia Thompson is in the Customer Success department with Robert King as Department Head.\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Customer Success department has $7,000 available software budget; requested $6,000 is within budget.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"Catalog search found NeuralDesk Business (SW009) with 150 seats, company-wide, approved for limited use.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"Purchase history shows NeuralDesk Business was purchased for Operations on 2026-07-29.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor NeuralDesk is approved in registry with security status approved as of 2026-03-02.\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows NeuralDesk stores data outside the operating region.\", \"source\": \"GET http://127.0.0.1:8012/BASE-04/none/vendor-risk/NeuralDesk\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine recommends REVIEW_EXISTING_TOOL_FIRST due to existing_tool_overlap flag.\", \"source\": \"Policy engine result\"}], \"questions_for_requester\": [\"Why is a new instance of NeuralDesk needed when NeuralDesk Business (SW009) is already approved for 150 seats? Please confirm if the existing license can be extended to include Customer Success agents.\", \"The vendor risk assessment is current (2026-03-02) but the vendor stores data outside the operating region. Please confirm that Customer Success agents will not be accessing customer PII or confidential documents outside the US region.\"], \"data_access_level\": \"customer_pii\", \"extra_data_classes\": [\"confidential_documents\", \"credentials\", \"customer_pii\", \"employee_pii\", \"production\", \"source_code\"], \"policy_version\": \"2026.09\", \"reference_date\": \"2026-09-30\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 674,
+   "prompt_token_count": 3860
+  }
+ }
+}

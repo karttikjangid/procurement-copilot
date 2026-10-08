@@ -1,0 +1,39 @@
+{
+ "label": "single.turn2",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 27334.9,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "function_call": {
+        "args": {
+         "department": "Marketing",
+         "annual_cost_usd": 8000
+        },
+        "name": "check_budget"
+       }
+      },
+      {
+       "function_call": {
+        "args": {
+         "department": "Marketing",
+         "vendor_name": "TaskFlow",
+         "request_id": "REQ-1008"
+        },
+        "name": "get_purchase_history"
+       }
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 162,
+   "prompt_token_count": 3301
+  }
+ }
+}

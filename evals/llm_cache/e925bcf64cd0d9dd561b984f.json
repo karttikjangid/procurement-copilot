@@ -1,0 +1,23 @@
+{
+ "label": "single.final",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 52011.1,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"extra_data_classes\": [], \"injection_detected\": false, \"injection_quote\": \"\", \"business_purpose_clear\": false, \"overlap_gap_credible\": \"no\", \"overlap_assessment\": \"SignFlow (SW010) is already approved company-wide with 45 seats. The request is for 3 additional identities under the same vendor/product. This is a potential add-on to existing capacity.\", \"questions_for_requester\": [\"Please clarify the specific business purpose: which three individuals need signing identities and for what exact use case (e.g., specific vendor agreements)?\", \"Confirm that the existing company-wide SignFlow license (45 seats) has available capacity for these 3 additional identities, or explain why a new purchase is needed.\"], \"summary\": \"The request is for 3 additional SignFlow e-signature identities at $800 annually. The requester is Noah Williams in Finance. Budget is available ($29,000 remaining). However, the existing catalog already has a company-wide SignFlow license with 45 seats. Before approving this as a new purchase, verify whether the existing license has unused capacity that could be leveraged instead.\", \"proposed_action\": \"REQUEST_CLARIFICATION\", \"proposed_approvals\": [\"Manager\"], \"proposed_risk_flags\": [\"existing_tool_overlap\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester is Noah Williams, Finance department, IC4 level, manager is Priya Shah (Director).\", \"source\": \"lookup_requester\"}, {\"call_id\": \"T2\", \"finding\": \"Catalog shows SignFlow (SW010) is approved, company-wide, 45 seats, $16,000 annual cost.\", \"source\": \"search_catalog\"}, {\"call_id\": \"T3\", \"finding\": \"Vendor registry shows SignFlow (V010) is approved, security status approved, review date 2026-06-20.\", \"source\": \"get_vendor_registry\"}, {\"call_id\": \"T4\", \"finding\": \"Vendor risk service shows SignFlow risk level low, security review approved, last review 2026-06-20, processes personal data but does not store outside region.\", \"source\": \"get_vendor_risk\"}, {\"call_id\": \"T5\", \"finding\": \"Finance department has $29,000 available software budget, requested $800 is within budget.\", \"source\": \"check_budget\"}, {\"call_id\": \"T6\", \"finding\": \"Purchase history shows Finance already has an approved SignFlow purchase (PO-2513) for $16,000. There is also an open request REQ-1010 for SignFlow Training Pack ($950) from the same department/vendor.\", \"source\": \"get_purchase_history\"}, {\"call_id\": \"T7\", \"finding\": \"Policy evaluation recommends REQUEST_CLARIFICATION due to unclear business purpose and existing tool overlap.\", \"source\": \"evaluate_policy\"}]}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 638,
+   "prompt_token_count": 3458
+  }
+ }
+}

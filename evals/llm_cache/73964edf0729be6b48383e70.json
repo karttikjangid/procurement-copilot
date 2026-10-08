@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 217347.9,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request to expand CodeMate Teams from 120 to 150 seats (30 additional users) is within the Engineering department's available software budget of $26,000. The vendor CodeMate is already approved for source-code access with a current security review (2026-08-20) and medium risk level. However, this is a seat expansion of an existing approved tool, not a new purchase, so it does not trigger new approval thresholds or require additional legal review.\", \"proposed_action\": \"REVIEW_EXISTING_TOOL_FIRST\", \"proposed_approvals\": [\"Department Head\", \"Procurement\", \"Finance\", \"Security\"], \"proposed_risk_flags\": [\"existing_tool_overlap\", \"security_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester Arjun Mehta (E002) is in the Engineering department with manager Maya Rao (E008).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Engineering department has $26,000 available software budget; requested $18,000 is within budget.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"Catalog shows CodeMate (SW008) is already approved for Engineering with 120 seats.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"Purchase history shows CodeMate was purchased on 2026-04-18 for 120 seats in Engineering.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor CodeMate (V008) has approved security status with review date 2026-08-20.\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows CodeMate is medium risk with approved security status as of 2026-08-20.\", \"source\": \"GET http://127.0.0.1:8012/BASE-03/none/vendor-risk/CodeMate\"}], \"questions_for_requester\": [\"Please confirm that the 30 additional seats are needed for the two new engineering squads and that the existing CodeMate license (120 seats) is still active and being utilized.\", \"Please confirm that the Git repository integration is required for the new squads and that no additional integrations are needed.\"], \"summary_for_reviewer\": \"The request to expand CodeMate Teams from 120 to 150 seats (30 additional users) is within the Engineering department's available software budget of $26,000. The vendor CodeMate is already approved for source-code access with a current security review (2026-08-20) and medium risk level. However, this is a seat expansion of an existing approved tool, not a new purchase, so it does not trigger new approval thresholds or require additional legal review.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 659,
+   "prompt_token_count": 3556
+  }
+ }
+}

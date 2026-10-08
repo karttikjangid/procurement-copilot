@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 109068.2,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request to purchase ProspectPilot from GrowthForge for $22,000 annually exceeds the Sales department's available software budget of $18,000, resulting in a $4,000 shortfall. The vendor is new with a high risk level and pending security review, requiring Security and Finance review. The request also requires Privacy and Legal review due to customer PII access and the new vendor status with annual spend over $10,000. The business purpose is clear, but the request is not ready for approval due to budget and compliance issues.\", \"proposed_action\": \"ROUTE_FOR_APPROVAL\", \"proposed_approvals\": [\"Department Head\", \"Procurement\", \"Finance\", \"Security\", \"Privacy\", \"Legal\"], \"proposed_risk_flags\": [\"budget_insufficient\", \"security_review_required\", \"privacy_review_required\", \"legal_review_required\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester is Elena Garcia (E003) in the Sales department, reporting to Robert King (E007), Director of Go To Market.\", \"source\": \"lookup_requester\"}, {\"call_id\": \"T2\", \"finding\": \"Sales department has $18,000 available software budget, but the request costs $22,000, creating a $4,000 shortfall.\", \"source\": \"check_budget\"}, {\"call_id\": \"T3\", \"finding\": \"No existing software in the catalog matches the requested product (ProspectPilot) or vendor (GrowthForge).\", \"source\": \"search_catalog\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests exist for the Sales department with the same vendor (GrowthForge).\", \"source\": \"get_purchase_history\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor GrowthForge (V012) is new with procurement status 'New', security status 'Pending', and legal terms status 'Unknown'.\", \"source\": \"get_vendor_registry\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows GrowthForge as 'high' risk, with security review 'not_completed' and data stored outside the operating region.\", \"source\": \"get_vendor_risk\"}, {\"call_id\": \"T7\", \"finding\": \"Policy engine action is 'ROUTE_FOR_APPROVAL' with required approvals from Department Head, Procurement, Finance, Security, Privacy, and Legal.\", \"source\": \"policy_engine_result\"}], \"questions_for_requester\": [\"Please confirm the total annual cost of $22,000 is accurate and within your department's budget expectations.\", \"Please provide a detailed explanation for why the existing CRM integration is necessary for this tool.\", \"Please clarify why a new vendor (GrowthForge) is needed when no prior purchases exist in the Sales department.\", \"Please provide a detailed security assessment or risk mitigation plan for the high-risk vendor (GrowthForge) and their data storage practices.\"], \"data_access_level\": [\"confidential_documents\", \"credentials\", \"customer_pii\", \"employee_pii\", \"production\", \"source_code\"], \"summary_for_reviewer\": \"The request to purchase ProspectPilot from GrowthForge for $22,000 annually exceeds the Sales department's available software budget of $18,000, resulting in a $4,000 shortfall. The vendor is new with a high risk level and pending security review, requiring Security and Finance review. The request also requires Privacy and Legal review due to customer PII access and the new vendor status with annual spend over $10,000. The business purpose is clear, but the request is not ready for approval due to budget and compliance issues.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 791,
+   "prompt_token_count": 3596
+  }
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "label": "staged.recommender",
+ "model": "qwen/qwen3.5-9b",
+ "latency_ms": 103151.8,
+ "response": {
+  "candidates": [
+   {
+    "content": {
+     "parts": [
+      {
+       "text": "{\"summary\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The requester is Noah Williams in the Finance department, which has $29,000 available in its software budget, so the cost is within budget. The vendor QuietNote is registered with an approved security status and a current security review date of 2026-05-01 (within the 365-day validity window from the policy reference date of 2026-09-30). The vendor risk assessment is low, and the vendor does not process personal data or store data outside the operating region. There is no existing tool in the catalog or purchase history that overlaps with this request, so no gap or exception reason is needed. The business purpose is clear and meets accessibility needs. No additional approvals beyond the standard thresholds are required based on the current evidence.\", \"proposed_action\": \"DO_NOT_PROCEED\", \"proposed_approvals\": [\"Manager\"], \"proposed_risk_flags\": [\"vendor_blocked\"], \"evidence_claims\": [{\"call_id\": \"T1\", \"finding\": \"Requester is Noah Williams in the Finance department, with manager Priya Shah (Director).\", \"source\": \"employees.csv\"}, {\"call_id\": \"T2\", \"finding\": \"Finance department has $29,000 available software budget; requested cost is $500, which is within budget.\", \"source\": \"department_budgets.csv\"}, {\"call_id\": \"T3\", \"finding\": \"No existing tool in the catalog matches the requested product or category.\", \"source\": \"software_catalog.csv\"}, {\"call_id\": \"T4\", \"finding\": \"No prior purchases or open requests for the same vendor in the department.\", \"source\": \"purchase_history.csv + requests.json\"}, {\"call_id\": \"T5\", \"finding\": \"Vendor QuietNote is registered with procurement status 'Blocked' and security status 'Approved'.\", \"source\": \"vendors.csv\"}, {\"call_id\": \"T6\", \"finding\": \"Vendor risk assessment shows 'low' risk, security review status 'approved', last review date 2026-05-01 (within 365-day validity).\", \"source\": \"GET http://127.0.0.1:8012/EXT-11/none/vendor-risk/QuietNote\"}], \"questions_for_requester\": [\"The vendor QuietNote is currently blocked in the procurement registry. Please confirm if this is a new vendor or if there is a known issue that needs to be resolved before proceeding.\"], \"summary_for_reviewer\": \"The request is for QuietNote Captions Teams, an accessibility tool for internal training videos, costing $500 annually for 5 users. The requester is Noah Williams in the Finance department, which has $29,000 available in its software budget, so the cost is within budget. The vendor QuietNote is registered with an approved security status and a current security review date of 2026-05-01 (within the 365-day validity window from the policy reference date of 2026-09-30). The vendor risk assessment is low, and the vendor does not process personal data or store data outside the operating region. There is no existing tool in the catalog or purchase history that overlaps with this request, so no gap or exception reason is needed. The business purpose is clear and meets accessibility needs. No additional approvals beyond the standard thresholds are required based on the current evidence. However, the vendor is currently blocked in the procurement registry, which prevents the request from proceeding. The vendor's procurement status is 'Blocked' (T5), and this flag overrides the otherwise favorable conditions.\"}"
+      }
+     ],
+     "role": "model"
+    }
+   }
+  ],
+  "usage_metadata": {
+   "candidates_token_count": 798,
+   "prompt_token_count": 3150
+  }
+ }
+}
