@@ -151,7 +151,11 @@ class GeminiClient:
         so agents.py stays provider-agnostic."""
         import requests
         from google.genai import types
-        messages: list[dict[str, Any]] = [{"role": "system", "content": system}]
+        # Thinking models (Qwen3.x) spend most of their time reasoning and LM Studio may
+        # return the answer outside `content`. LLM_NO_THINK=1 (default for this provider)
+        # adds Qwen's documented /no_think switch.
+        no_think = os.getenv("LLM_NO_THINK", "1") == "1"
+        messages: list[dict[str, Any]] = [{"role": "system", "content": system + ("\n/no_think" if no_think else "")}]
         pending: list[tuple[str, str]] = []
         n = 0
         for content in contents:
@@ -176,6 +180,8 @@ class GeminiClient:
                 messages.append({"role": "assistant", "content": "\n".join(texts) or None, "tool_calls": calls})
             elif texts:
                 messages.append({"role": role, "content": "\n".join(texts)})
+        if no_think and messages[-1]["role"] == "user" and isinstance(messages[-1].get("content"), str):
+            messages[-1]["content"] += "\n/no_think"
         body: dict[str, Any] = {"model": self.model, "messages": messages, "temperature": 0}
         if tools:
             body["tools"] = [{"type": "function", "function": {"name": d.name, "description": d.description,
@@ -204,6 +210,9 @@ class GeminiClient:
         else:
             raise LLMUnavailable(f"OpenAI-compatible server failed: {last}")
         msg = payload["choices"][0]["message"]
+        debug = Path(os.getenv("LLM_DEBUG_DIR", str(ROOT / "runs")))
+        debug.mkdir(exist_ok=True)
+        (debug / "last_openai_message.json").write_text(json.dumps(msg, indent=1)[:20000], encoding="utf-8")
         parts = []
         for tc in msg.get("tool_calls") or []:
             try:
@@ -211,8 +220,14 @@ class GeminiClient:
             except json.JSONDecodeError:
                 args = {"_unparseable_arguments": tc["function"].get("arguments")}
             parts.append(types.Part(function_call=types.FunctionCall(name=tc["function"]["name"], args=args)))
-        if msg.get("content") and not parts:
-            text = re.sub(r"<think>.*?</think>", "", msg["content"], flags=re.S).strip()
+        if not parts:
+            text = re.sub(r"<think>.*?(</think>|$)", "", msg.get("content") or "", flags=re.S).strip()
+            if not text:
+                # Some servers put the whole answer in the reasoning field.
+                reasoning = msg.get("reasoning_content") or msg.get("reasoning") or ""
+                if isinstance(reasoning, dict):
+                    reasoning = json.dumps(reasoning)
+                text = _last_json_object(str(reasoning)) or ""
             parts.append(types.Part.from_text(text=text))
         usage = payload.get("usage") or {}
         response = types.GenerateContentResponse(
@@ -229,8 +244,35 @@ def response_text(response) -> str:
         return ""
 
 
+def _last_json_object(text: str) -> str | None:
+    """Return the last balanced {...} block in text, if any."""
+    end = text.rfind("}")
+    while end != -1:
+        depth = 0
+        for i in range(end, -1, -1):
+            if text[i] == "}":
+                depth += 1
+            elif text[i] == "{":
+                depth -= 1
+                if depth == 0:
+                    candidate = text[i:end + 1]
+                    try:
+                        json.loads(candidate)
+                        return candidate
+                    except json.JSONDecodeError:
+                        break
+        end = text.rfind("}", 0, end)
+    return None
+
+
 def parse_json(text: str) -> dict:
-    text = text.strip()
+    text = re.sub(r"<think>.*?(</think>|$)", "", text.strip(), flags=re.S).strip()
     if text.startswith("```"):
         text = re.sub(r"^```(json)?|```$", "", text, flags=re.MULTILINE).strip()
-    return json.loads(text)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        block = _last_json_object(text)
+        if block is None:
+            raise
+        return json.loads(block)
