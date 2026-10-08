@@ -150,7 +150,8 @@ def summarise(rows: list[dict], archs: list[str]) -> str:
         vals = []
         for a in archs:
             rs = [r for r in rows if r["architecture"] == a]
-            vals.append(fmt.format(fn(rs)) if rs else "-")
+            v = fn(rs) if rs else None
+            vals.append("-" if v is None else fmt.format(v))
         return vals
     n = lambda rs: len(rs)  # noqa: E731
     metrics = [
@@ -159,7 +160,7 @@ def summarise(rows: list[dict], archs: list[str]) -> str:
         ("Correct approvals", lambda rs: sum(r["ok_approvals"] for r in rs) / n(rs)),
         ("Correct risk flags", lambda rs: sum(r["ok_flags"] for r in rs) / n(rs)),
         ("Missing-info correct", lambda rs: sum(r["ok_missing_info"] for r in rs) / n(rs)),
-        ("Public minimum checks (6 public cases)", lambda rs: sum(r["ok_public_minimum"] for r in rs if r["case_id"] in PUB_CASE_IDS) / max(1, sum(1 for r in rs if r["case_id"] in PUB_CASE_IDS))),
+        ("Public minimum checks (6 public cases)", lambda rs: (sum(r["ok_public_minimum"] for r in rs if r["case_id"] in PUB_CASE_IDS) / sum(1 for r in rs if r["case_id"] in PUB_CASE_IDS)) if any(r["case_id"] in PUB_CASE_IDS for r in rs) else None),
         ("Under-escalation (missed Finance/CFO/Security/Privacy/Legal)", lambda rs: sum(bool(r["under_escalation"]) for r in rs) / n(rs)),
         ("Over-escalation (extra approvers)", lambda rs: sum(bool(r["over_escalation"]) for r in rs) / n(rs)),
         ("Human review required on every case", lambda rs: sum(r["ok_human_review"] for r in rs) / n(rs)),
