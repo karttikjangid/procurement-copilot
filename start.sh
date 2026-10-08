@@ -15,5 +15,5 @@ if [ ! -f .venv/.installed ]; then
   .venv/bin/python -m pip install -q --upgrade pip
   .venv/bin/python -m pip install -q -r requirements.txt && touch .venv/.installed
 fi
-[ -f .env ] || { cp .env.example .env; echo "Created .env from .env.example. Add GOOGLE_API_KEY (or LM Studio settings). Without a model the UI still works: approvals come from the deterministic checks and runs are flagged llm_unavailable (set LLM_MODE=off to silence that)."; }
+[ -f .env ] || { cp .env.example .env; echo "Created .env from .env.example. Add GOOGLE_API_KEY (or LM Studio settings). Without a model the UI still works: approvals come from the deterministic checks and runs are flagged llm_unavailable."; }
 exec .venv/bin/python run_local.py
