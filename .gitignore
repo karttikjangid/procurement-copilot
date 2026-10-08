@@ -1,12 +1,13 @@
+.env
 .venv/
+.venv*/
 __pycache__/
 *.pyc
-.env
-.DS_Store
 .pytest_cache/
-evals/results_*.csv
-# NOTE: the starter ignored evals/results_*.csv; results are deliverables here, so they are committed.
-!evals/results_*.csv
-.venv*/
+.DS_Store
 *.log
+# local approval audit DB and debug output from the UI
 runs/
+# ad-hoc eval output folders (the committed results live in evals/results and evals/results_staged)
+evals/results_replay/
+evals/replay_check/
