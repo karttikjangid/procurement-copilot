@@ -31,8 +31,10 @@ Checks:
 python verify_setup.py                                   # starter preflight
 python -m pytest -q tests                                # 48 tests: 10 starter + 38 policy/regression (policy edges, fail-closed paths, review regressions)
 python evals/run_public_evals.py --architecture staged   # needs the mock API running (python run_local.py)
-python evals/run_eval.py --replay                        # full A/B evaluation from recorded responses, no key
+python evals/summarize.py                                # rebuilds the result tables from the saved traces, no key
 ```
+
+Replaying A and B from recorded responses needs the recorded model and port; see **Reproduce** under Results.
 
 ## Product workflow
 
@@ -72,7 +74,7 @@ The starter preflight passes, but 9 code issues and 10 data/policy issues were f
 - **Reference row:** `rules` runs the same pipeline with no LLM, to show what the model adds.
 - **Faults are injected** per case by the eval's own vendor-risk service (timeout, malformed response, outage).
 - **Outputs:** `evals/results/FINAL_RESULTS.md` (tables), `final_per_case.csv`, and one trace per run in `evals/results/traces/` (rules, A) and `evals/results_staged/traces/` (B). `run_eval.py` writes `summary.md` for whatever it just ran.
-- **Reproducible:** every LLM response is recorded in `evals/llm_cache/`; `python evals/run_eval.py --replay` rebuilds `evals/results/` without a key.
+- **Reproducible:** every LLM response is recorded in `evals/llm_cache/`; the replay commands under **Reproduce** re-run A and B without a key or model.
 
 ### Results
 
