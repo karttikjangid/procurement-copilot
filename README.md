@@ -44,6 +44,8 @@ python evals/run_eval.py --replay                        # full A/B evaluation f
 
 ## Architecture
 
+![Workflow](docs/architecture.png)
+
 See [docs/architecture.md](docs/architecture.md) for the diagram, tools, agent roles, guardrail steps and stop conditions.
 
 | | A: single agent | B: staged, 2 agents |
