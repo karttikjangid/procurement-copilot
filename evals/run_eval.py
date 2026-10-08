@@ -193,11 +193,15 @@ def main() -> None:
     ap.add_argument("--repeats", type=int, default=1)
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--cases", nargs="*", help="case ids to run (default: all)")
+    ap.add_argument("--port", type=int, default=8011, help="port for the eval vendor-risk service (use another one to run two evals at once)")
+    ap.add_argument("--out", default="results", help="output folder under evals/ (use another one to run two evals at once)")
     ap.add_argument("--replay", action="store_true", help="use recorded LLM responses only (no API key needed)")
     args = ap.parse_args()
     if args.replay:
         os.environ["LLM_MODE"] = "replay"
     os.environ.setdefault("LLM_CACHE", "on")
+    global PORT, OUT
+    PORT, OUT = args.port, ROOT / "evals" / args.out
     cases = [c for c in CASES if not args.cases or c["case_id"] in args.cases]
     OUT.mkdir(parents=True, exist_ok=True)
     harness_server.start(PORT)
