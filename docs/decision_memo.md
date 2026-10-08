@@ -6,7 +6,7 @@ Ship **Architecture B (staged)**: code gathers all evidence, one analyst call re
 
 ## Evidence
 
-Same model (qwen3.5-9b, local), same cases, same labels, scored by code. Full tables: `evals/results/FINAL_RESULTS.md`.
+Same model (qwen3.5-9b, local), same cases, same labels, scored by code.
 
 | Metric (9 matched cases, incl. all 6 public) | A: single agent | B: staged |
 |---|---:|---:|
@@ -19,7 +19,7 @@ Same model (qwen3.5-9b, local), same cases, same labels, scored by code. Full ta
 | Agent skipped a tool | 1 case | not possible |
 | LLM evidence claims grounded | 95% | 97% |
 
-On 28 cases, B against the no-LLM reference: missed reviews fell from 2 cases to 0, because the model noticed customer PII and production access that were only written in the justification. Over-escalation rose from 0 to 2 cases.
+On 28 cases, B against the no-LLM reference: missed reviews fell from 2 cases to 0, because the model noticed customer PII and production access stated only in the justification. Over-escalation rose from 0 to 2 cases.
 
 ## Trade-offs
 

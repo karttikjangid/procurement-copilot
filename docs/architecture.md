@@ -16,9 +16,9 @@ LLM judgment enters the policy engine only as *signals* that can add reviews ("e
 flowchart TD
     R[Purchase request<br/>untrusted data] --> A{Architecture}
     A -->|A: single| S1[One agent, tool loop<br/>chooses tools, max 12 calls]
-    S1 <--> T[(6 tools<br/>5 deterministic + vendor-risk API)]
+    S1 <--> T[(6 evidence tools<br/>5 deterministic + vendor-risk API)]
     S1 --> P1[evaluate_policy tool]
-    A -->|B: staged| B0[Stage 0, code:<br/>call all 6 tools]
+    A -->|B: staged| B0[Stage 0, code:<br/>call all 6 evidence tools]
     B0 --> B1[Agent 1: analyst<br/>judgment signals]
     B1 --> B2[Policy engine]
     B2 --> B3[Agent 2: recommender<br/>summary + cited evidence]

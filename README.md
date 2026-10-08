@@ -8,7 +8,7 @@ Built for FDE Assessment 3 on top of the provided starter pack. The `handle_requ
 
 ## Quick start
 
-Requires Python 3.11+.
+Requires Python 3.11+ (macOS ships 3.9: `brew install python@3.12`).
 
 ```bash
 ./start.sh                 # first run creates .venv, installs requirements, copies .env.example to .env
@@ -22,14 +22,14 @@ Model settings live in `.env` (see `.env.example`):
 |---|---|
 | `GOOGLE_API_KEY` + `MODEL_NAME` | Gemini (default `gemini-3.7-flash`) |
 | `LLM_PROVIDER=openai`, `LLM_BASE_URL`, `MODEL_NAME` | Any OpenAI-compatible local server (LM Studio, Ollama, vLLM) |
-| `LLM_MODE=replay` | Use recorded responses only, no key needed |
+| `LLM_MODE=replay` | Recorded responses only, no key needed (recordings match the eval runs, so use it with `evals/run_eval.py --replay`; in the UI use `LLM_MODE=off` without a key) |
 | `LLM_MODE=off` | Deterministic checks only |
 
 Checks:
 
 ```bash
 python verify_setup.py                                   # starter preflight
-python -m pytest -q tests                                # 48 tests (policy edges, fail-closed paths, review regressions)
+python -m pytest -q tests                                # 48 tests: 10 starter + 38 policy/regression (policy edges, fail-closed paths, review regressions)
 python evals/run_public_evals.py --architecture staged   # needs the mock API running (python run_local.py)
 python evals/run_eval.py --replay                        # full A/B evaluation from recorded responses, no key
 ```
@@ -48,7 +48,7 @@ See [docs/architecture.md](docs/architecture.md) for the diagram, tools, agent r
 
 | | A: single agent | B: staged, 2 agents |
 |---|---|---|
-| Evidence gathering | The agent chooses tools (function calling) | Code calls all 6 tools in a fixed order |
+| Evidence gathering | The agent chooses tools (function calling) | Code calls all 6 evidence tools in a fixed order, then `evaluate_policy` |
 | LLM calls | Variable (tool turns + final) | Always 2 (analyst, recommender) |
 | Decision | Policy engine + shared guardrail | Policy engine + shared guardrail |
 
@@ -69,6 +69,7 @@ The starter preflight passes, but 9 code issues and 10 data/policy issues were f
 - **Scoring is done by code**, not an LLM judge: exact action, exact approval set, required and forbidden flags, missing-information items, evidence content, under- and over-escalation, plus the public runner's minimum checks.
 - **Reference row:** `rules` runs the same pipeline with no LLM, to show what the model adds.
 - **Faults are injected** per case by the eval's own vendor-risk service (timeout, malformed response, outage).
+- **Outputs:** `evals/results/FINAL_RESULTS.md` (tables), `final_per_case.csv`, and one trace per run in `evals/results/traces/` (rules, A) and `evals/results_staged/traces/` (B). `run_eval.py` writes `summary.md` for whatever it just ran.
 - **Reproducible:** every LLM response is recorded in `evals/llm_cache/`; `python evals/run_eval.py --replay` rebuilds `evals/results/` without a key.
 
 ### Results

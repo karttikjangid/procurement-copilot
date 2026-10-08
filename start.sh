@@ -10,10 +10,10 @@ if [ -z "$PY" ]; then
   done
 fi
 [ -n "$PY" ] || { echo "Python 3.11+ is required (set PYTHON=/path/to/python3.11)."; exit 1; }
-if [ ! -d .venv ]; then
-  "$PY" -m venv .venv
+if [ ! -f .venv/.installed ]; then
+  [ -d .venv ] || "$PY" -m venv .venv
   .venv/bin/python -m pip install -q --upgrade pip
-  .venv/bin/python -m pip install -q -r requirements.txt
+  .venv/bin/python -m pip install -q -r requirements.txt && touch .venv/.installed
 fi
-[ -f .env ] || { cp .env.example .env; echo "Created .env from .env.example. Add GOOGLE_API_KEY (or set LLM_MODE=replay / off)."; }
+[ -f .env ] || { cp .env.example .env; echo "Created .env from .env.example. Add GOOGLE_API_KEY (or LM Studio settings). Without a model the UI still works: approvals come from the deterministic checks and runs are flagged llm_unavailable (set LLM_MODE=off to silence that)."; }
 exec .venv/bin/python run_local.py
