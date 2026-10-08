@@ -73,7 +73,7 @@ The starter preflight passes, but 9 code issues and 10 data/policy issues were f
 
 ### Results
 
-Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (thinking off, temperature 0, one repeat). Free-tier Gemini allowed about 20 requests per model per day, too few for this comparison. Local inference took 2 to 20 minutes per case, so A finished 9 cases and B 28 before the deadline; A and B are compared only on cases both finished. Full tables and every failure: [evals/results/FINAL_RESULTS.md](evals/results/FINAL_RESULTS.md).
+Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (thinking off, temperature 0, one repeat). Free-tier Gemini allowed about 20 requests per model per day, too few for this comparison. Local inference took about 1 to 12 minutes of model time per case, so A finished 9 cases and B 28 before the deadline; A and B are compared only on cases both finished. Full tables and every failure: [evals/results/FINAL_RESULTS.md](evals/results/FINAL_RESULTS.md).
 
 **A vs B on the 9 matched cases (the starter's REQ-1001 to REQ-1009, including all 6 public cases):**
 
@@ -97,7 +97,7 @@ Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (thinking off, temperatur
 
 ## Architecture decision
 
-**Ship B (staged).** Same accuracy as A on the matched cases, 2.5 times fewer LLM calls, about 3 times lower latency, fixed cost per request, and evidence gathering that cannot skip a check because it is plain code. The model is only asked the judgment questions the rules cannot answer. Memo (under 500 words): [docs/decision_memo.md](docs/decision_memo.md).
+**Ship B (staged).** Same full-pass rate as A on the matched cases (7/9; B better on next action, A better on approvals and flags), 2.5 times fewer LLM calls, about 3 times lower latency, fixed cost per request, and evidence gathering that cannot skip a check because it is plain code. The model is only asked the judgment questions the rules cannot answer. Memo (under 500 words): [docs/decision_memo.md](docs/decision_memo.md).
 
 ## Known limitations
 

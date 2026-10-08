@@ -47,7 +47,7 @@ sections.append(("Deterministic reference, all cases", sorted(done("rules"), key
 out = ["# Final evaluation results", "",
        "Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (local), temperature 0, thinking off. One repeat.",
        "`rules` = the same pipeline with no LLM (reference row). Scores are computed by code against `evals/cases/labels.json`.",
-       "Architecture A was stopped early because local inference took 4 to 20 minutes per case, so A vs B is compared only on the cases both finished.", ""]
+       "Architecture A was stopped early because local inference took about 1 to 12 minutes of model time per case, so A vs B is compared only on the cases both finished.", ""]
 for title, ids, archs in sections:
     sub = [r for r in rows if r["case_id"] in ids and r["architecture"] in archs]
     out += [f"## {title} ({len(ids)} cases)", "", "Cases: " + ", ".join(ids), "", summarise(sub, archs), ""]

@@ -2,7 +2,7 @@
 
 Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (local), temperature 0, thinking off. One repeat.
 `rules` = the same pipeline with no LLM (reference row). Scores are computed by code against `evals/cases/labels.json`.
-Architecture A was stopped early because local inference took 4 to 20 minutes per case, so A vs B is compared only on the cases both finished.
+Architecture A was stopped early because local inference took about 1 to 12 minutes of model time per case, so A vs B is compared only on the cases both finished.
 
 ## A vs B on the matched set (9 cases)
 
