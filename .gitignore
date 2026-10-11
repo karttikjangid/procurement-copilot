@@ -11,3 +11,7 @@ runs/
 # ad-hoc eval output folders (the committed results live in evals/results and evals/results_staged)
 evals/results_replay/
 evals/replay_check/
+# per-run outputs of evals/run_eval.py (the committed results are FINAL_RESULTS.md, final_per_case.csv and traces/)
+evals/results*/summary.md
+evals/results*/per_case.csv
+evals/results*/failures.md

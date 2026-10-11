@@ -25,7 +25,7 @@ Model settings live in `.env` (see `.env.example`):
 | `LLM_MODE=replay` | Recorded responses only, no key needed (recordings match the eval runs, so use it with `evals/run_eval.py --replay`; in the UI use `LLM_MODE=off` without a key) |
 | `LLM_MODE=off` | Deterministic checks only |
 
-Checks:
+Checks (inside the venv: `source .venv/bin/activate`; outside it, macOS needs `python3`):
 
 ```bash
 python verify_setup.py                                   # starter preflight

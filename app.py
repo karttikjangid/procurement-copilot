@@ -7,7 +7,12 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+import os
+
 import src  # noqa: F401  (loads .env)
+
+# UI runs should not add recordings to evals/llm_cache (those belong to the evaluation).
+os.environ.setdefault("LLM_CACHE", "off")
 from src.copilot import approvals, data
 from src.copilot.config import llm_mode, model_name, reference_date
 from src.copilot.pipeline import run_copilot

@@ -9,6 +9,7 @@ from typing import Any
 
 from src.contracts import EvidenceItem, ProcurementDecision, RunTelemetry
 from src.copilot import agents
+from src.copilot.config import llm_mode
 from src.copilot.llm import GeminiClient, LLMStats, LLMUnavailable
 from src.copilot.policy import ACTION_LABELS, PolicyResult, Signals, evaluate, facts_from_calls
 from src.copilot.tools import ToolBox, record
@@ -247,7 +248,7 @@ def run_copilot(request: dict, architecture: str = "single") -> tuple[Procuremen
     if not any(c.tool == "evaluate_policy" for c in tb.calls):
         record(tb, "evaluate_policy", {"signals": "final"}, True, policy.as_dict(), "src/copilot/policy.py")
     llm_ok = final_raw is not None
-    if architecture in ("single", "staged") and (not llm_ok or raw.get("errors")):
+    if architecture in ("single", "staged") and llm_mode() != "off" and (not llm_ok or raw.get("errors")):
         policy.flag("llm_unavailable", "model output unavailable or incomplete; approvals and flags come from deterministic checks only"
                     + (f" ({raw.get('errors')[0][:120]})" if raw.get("errors") else ""))
 
