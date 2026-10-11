@@ -31,8 +31,9 @@ from evals.run_public_evals import evaluate as public_evaluate  # noqa: E402
 from src.copilot.config import OVERRIDES  # noqa: E402
 from src.copilot.pipeline import run_copilot  # noqa: E402
 
-CASES = json.loads((ROOT / "evals/cases/cases.json").read_text())
-LABELS = json.loads((ROOT / "evals/cases/labels.json").read_text())
+CASE_DIR = Path(os.getenv("EVAL_CASE_DIR", str(ROOT / "evals/cases")))  # evals/hidden for the held-out set
+CASES = json.loads((CASE_DIR / "cases.json").read_text())
+LABELS = json.loads((CASE_DIR / "labels.json").read_text())
 PUBLIC = {c["request_id"]: c for c in json.loads((ROOT / "evals/public_cases.json").read_text())}
 OUT = ROOT / "evals" / "results"
 PORT = 8011

@@ -1,0 +1,324 @@
+{
+ "decision": {
+  "request_id": "H-09",
+  "recommendation": "Route to the required human approvers (Department Head, Procurement, Finance). Deterministic checks completed; see evidence and required approvals.",
+  "evidence": [
+   {
+    "source": "lookup_requester",
+    "finding": "Requester Ines Okafor (E031), Engineering; manager Maya Rao; department head for routing Maya Rao (Director/VP in the same department)",
+    "reference": "employees.csv:E031 (T1)"
+   },
+   {
+    "source": "check_budget",
+    "finding": "Engineering available software budget $26,000 (annual $300,000, committed $274,000); requested $25,000 is within it",
+    "reference": "department_budgets.csv:Engineering (T2)"
+   },
+   {
+    "source": "search_catalog",
+    "finding": "No approved catalog product with the same vendor, product or category",
+    "reference": "T3"
+   },
+   {
+    "source": "get_vendor_registry",
+    "finding": "Registry: procurement Approved, security Approved (review 2026-08-01), legal terms Approved; note: Standard vendor",
+    "reference": "vendors.csv:V956 (T5)"
+   },
+   {
+    "source": "get_vendor_risk",
+    "finding": "Vendor-risk service: review approved (last 2026-08-01), risk low, personal data False, stores outside region False; note: Current assessment.",
+    "reference": "GET http://127.0.0.1:8031/HID-09/none/vendor-risk/Stratamesh (T6)"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Annual amount $25,000.00 falls in tier '$10,000.01 - $25,000': minimum approvals Department Head, Finance, Procurement",
+    "reference": "Policy 4"
+   },
+   {
+    "source": "evaluate_policy",
+    "finding": "Vendor security assessment: registry=approved_current, service=approved_current; current=True (reference date 2026-09-30, valid 365 days)",
+    "reference": "Policy 5"
+   }
+  ],
+  "required_approvals": [
+   "Department Head",
+   "Procurement",
+   "Finance"
+  ],
+  "missing_information": [],
+  "risk_flags": [],
+  "next_step": "Send the evidence pack to: Department Head, Procurement, Finance. Each approver decides; the copilot does not approve or purchase.",
+  "human_review_required": true,
+  "telemetry": {
+   "llm_calls": 0,
+   "tool_calls": 7,
+   "tool_names": [
+    "lookup_requester",
+    "check_budget",
+    "search_catalog",
+    "get_purchase_history",
+    "get_vendor_registry",
+    "get_vendor_risk",
+    "evaluate_policy"
+   ]
+  }
+ },
+ "trace": {
+  "request_id": "H-09",
+  "architecture": "rules",
+  "errors": [],
+  "action": "ROUTE_FOR_APPROVAL",
+  "policy": {
+   "action": "ROUTE_FOR_APPROVAL",
+   "action_label": "Route to the required human approvers",
+   "approvals": {
+    "Department Head": [
+     "annual amount $25,000.00 is in tier '$10,000.01 - $25,000'"
+    ],
+    "Procurement": [
+     "annual amount $25,000.00 is in tier '$10,000.01 - $25,000'"
+    ],
+    "Finance": [
+     "annual amount $25,000.00 is in tier '$10,000.01 - $25,000'"
+    ]
+   },
+   "flags": {},
+   "missing_information": [],
+   "data_classes": [],
+   "data_level_unknown": false,
+   "vendor_assessment": {
+    "registry_state": "approved_current",
+    "registry_review_date": "2026-08-01",
+    "registry_review_age_days": 60,
+    "api_state": "approved_current",
+    "api_review_date": "2026-08-01",
+    "api_review_age_days": 60,
+    "reference_date": "2026-09-30",
+    "valid_days": 365
+   },
+   "annual_cost_usd": 25000.0,
+   "findings": [
+    {
+     "finding": "Annual amount $25,000.00 falls in tier '$10,000.01 - $25,000': minimum approvals Department Head, Finance, Procurement",
+     "reference": "Policy 4"
+    },
+    {
+     "finding": "Vendor security assessment: registry=approved_current, service=approved_current; current=True (reference date 2026-09-30, valid 365 days)",
+     "reference": "Policy 5"
+    }
+   ],
+   "critical_failure": null
+  },
+  "signals": {
+   "extra_data_classes": [],
+   "injection_detected": false,
+   "injection_quote": "",
+   "business_purpose_clear": null,
+   "overlap_gap_credible": null
+  },
+  "llm_raw": {},
+  "llm_ok": false,
+  "tool_calls": [
+   {
+    "call_id": "T1",
+    "tool": "lookup_requester",
+    "args": {
+     "employee_id": "E031"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "employee_id": "E031",
+     "name": "Ines Okafor",
+     "department": "Engineering",
+     "level": "IC4",
+     "country": "India",
+     "manager": {
+      "employee_id": "E008",
+      "name": "Maya Rao",
+      "level": "Director"
+     },
+     "department_head": {
+      "employee_id": "E008",
+      "name": "Maya Rao",
+      "department": "Engineering",
+      "basis": "Director/VP in the same department"
+     }
+    },
+    "error": null,
+    "source": "employees.csv",
+    "latency_ms": 0.2
+   },
+   {
+    "call_id": "T2",
+    "tool": "check_budget",
+    "args": {
+     "department": "Engineering",
+     "annual_cost_usd": 25000.0
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "department": "Engineering",
+     "annual_software_budget_usd": 300000,
+     "committed_usd": 274000,
+     "available_usd": 26000.0,
+     "available_valid": true,
+     "requested_annual_cost_usd": 25000.0,
+     "within_available_budget": true,
+     "shortfall_usd": 0.0
+    },
+    "error": null,
+    "source": "department_budgets.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T3",
+    "tool": "search_catalog",
+    "args": {
+     "product_name": "Stratamesh Pipelines",
+     "vendor_name": "Stratamesh",
+     "category": "Data Integration"
+    },
+    "ok": true,
+    "data": {
+     "query": {
+      "product_name": "Stratamesh Pipelines",
+      "vendor_name": "Stratamesh",
+      "category": "Data Integration"
+     },
+     "matches": []
+    },
+    "error": null,
+    "source": "software_catalog.csv",
+    "latency_ms": 0.2
+   },
+   {
+    "call_id": "T4",
+    "tool": "get_purchase_history",
+    "args": {
+     "department": "Engineering",
+     "vendor_name": "Stratamesh",
+     "request_id": "H-09"
+    },
+    "ok": true,
+    "data": {
+     "reference_date": "2026-09-30",
+     "purchases": [],
+     "open_requests_same_department_vendor": []
+    },
+    "error": null,
+    "source": "purchase_history.csv + requests.json",
+    "latency_ms": 0.3
+   },
+   {
+    "call_id": "T5",
+    "tool": "get_vendor_registry",
+    "args": {
+     "vendor_name": "Stratamesh"
+    },
+    "ok": true,
+    "data": {
+     "found": true,
+     "ambiguous": false,
+     "vendor_id": "V956",
+     "vendor_name": "Stratamesh",
+     "procurement_status": "Approved",
+     "security_status": "Approved",
+     "security_review_date": "2026-08-01",
+     "legal_terms_status": "Approved",
+     "notes": "Standard vendor"
+    },
+    "error": null,
+    "source": "vendors.csv",
+    "latency_ms": 0.1
+   },
+   {
+    "call_id": "T6",
+    "tool": "get_vendor_risk",
+    "args": {
+     "vendor_name": "Stratamesh"
+    },
+    "ok": true,
+    "data": {
+     "record_found": true,
+     "vendor_name": "Stratamesh",
+     "risk_level": "low",
+     "security_review_status": "approved",
+     "last_review_date": "2026-08-01",
+     "processes_personal_data": false,
+     "stores_data_outside_region": false,
+     "notes": "Current assessment."
+    },
+    "error": null,
+    "source": "GET http://127.0.0.1:8031/HID-09/none/vendor-risk/Stratamesh",
+    "latency_ms": 2.6
+   },
+   {
+    "call_id": "T7",
+    "tool": "evaluate_policy",
+    "args": {
+     "signals": "final"
+    },
+    "ok": true,
+    "data": {
+     "action": "ROUTE_FOR_APPROVAL",
+     "action_label": "Route to the required human approvers",
+     "approvals": {
+      "Department Head": [
+       "annual amount $25,000.00 is in tier '$10,000.01 - $25,000'"
+      ],
+      "Procurement": [
+       "annual amount $25,000.00 is in tier '$10,000.01 - $25,000'"
+      ],
+      "Finance": [
+       "annual amount $25,000.00 is in tier '$10,000.01 - $25,000'"
+      ]
+     },
+     "flags": {},
+     "missing_information": [],
+     "data_classes": [],
+     "data_level_unknown": false,
+     "vendor_assessment": {
+      "registry_state": "approved_current",
+      "registry_review_date": "2026-08-01",
+      "registry_review_age_days": 60,
+      "api_state": "approved_current",
+      "api_review_date": "2026-08-01",
+      "api_review_age_days": 60,
+      "reference_date": "2026-09-30",
+      "valid_days": 365
+     },
+     "annual_cost_usd": 25000.0,
+     "findings": [
+      {
+       "finding": "Annual amount $25,000.00 falls in tier '$10,000.01 - $25,000': minimum approvals Department Head, Finance, Procurement",
+       "reference": "Policy 4"
+      },
+      {
+       "finding": "Vendor security assessment: registry=approved_current, service=approved_current; current=True (reference date 2026-09-30, valid 365 days)",
+       "reference": "Policy 5"
+      }
+     ],
+     "critical_failure": null
+    },
+    "error": null,
+    "source": "src/copilot/policy.py",
+    "latency_ms": 0.0
+   }
+  ],
+  "agent_defects": [],
+  "overrides": [],
+  "grounded_claims": [],
+  "ungrounded_claims": [],
+  "questions_for_requester": [],
+  "llm": {
+   "calls": 0,
+   "cache_hits": 0,
+   "latency_ms": 0.0,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "log": []
+  },
+  "wall_ms": 4.0
+ }
+}
