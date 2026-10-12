@@ -2,8 +2,8 @@
 
 Two labellers labelled all 39 cases independently from `data/procurement_policy.md` and the data files:
 
-1. `evals/cases/labels_claude.json`: written together with the case inputs.
-2. `evals/cases/labels_blind.json`: an independent agent that saw only the policy, the data and the case inputs (no implementation, no other labels).
+1. `evals/cases/labels_mine.json`: my labels, written together with the case inputs.
+2. `evals/cases/labels_blind.json`: an independent AI agent that saw only the policy, the data and the case inputs (no implementation, no other labels).
 
 | Measure | Agreement |
 |---|---:|
@@ -12,7 +12,7 @@ Two labellers labelled all 39 cases independently from `data/procurement_policy.
 
 ## Disagreements and how they were settled
 
-| Case | Claude | Blind | Decision in `labels.json` |
+| Case | Mine | Blind | Decision in `labels.json` |
 |---|---|---|---|
 | BASE-06 (REQ-1006, no cost, data level "unknown") | Security required (unknown data, fail closed) | No approvals certain until cost is known | Not scored: approvals are provisional until clarification |
 | BASE-09 (REQ-1009, vendor-risk API down, confidential documents) | Privacy required (residency cannot be verified) | Privacy not required | Privacy optional: present or absent both pass |

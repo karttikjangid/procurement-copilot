@@ -1,10 +1,10 @@
 # AI Procurement Request Copilot
 
-An internal tool that reviews a software purchase request, gathers evidence with tools, applies the procurement policy in code, and recommends the next action. Humans make every approval.
+I built an internal tool that reviews a software purchase request, gathers evidence with tools, applies the procurement policy in code, and recommends the next action. Humans make every approval.
 
-Built for FDE Assessment 3 on top of the provided starter pack. The `handle_request(request_id, architecture)` adapter in `src/solution.py` is unchanged in signature.
+I built it for FDE Assessment 3 on top of the provided starter pack, and I kept the `handle_request(request_id, architecture)` adapter in `src/solution.py` unchanged in signature.
 
-**Design in one line:** the LLM interprets and explains; code decides approvals, thresholds, dates and flags; humans approve.
+**My design in one line:** the LLM interprets and explains; code decides approvals, thresholds, dates and flags; humans approve.
 
 ## Quick start
 
@@ -64,21 +64,22 @@ See [docs/assumptions.md](docs/assumptions.md). The most important: reference da
 
 ## Starter pack issues
 
-The starter preflight passes, but 9 code issues and 10 data/policy issues were found and handled. See [docs/starter_issues.md](docs/starter_issues.md).
+The starter preflight passes, but I found and handled 9 code issues and 10 data/policy issues. See [docs/starter_issues.md](docs/starter_issues.md).
 
 ## Evaluation
 
-- **Test set:** 39 cases = the 6 public cases, the 4 other starter requests, and 29 synthetic edge cases (threshold and date edges, budget edges, conflicting/unavailable/malformed vendor evidence, unknown and blocked vendors, unknown requester, prompt injection in request text and in API data, sensitive data visible only in the text, vague purpose, invalid fields, and combinations). Inputs: `evals/cases/cases.json`.
-- **Labels:** written twice, independently. A blind labeller saw only the policy and data. Agreement was 39/39 on next action and 37/39 on approvals; disagreements were settled in `evals/adjudication.md`. Final labels: `evals/cases/labels.json`.
+- **Test set:** I built 39 cases: the 6 public cases, the 4 other starter requests, and 29 synthetic edge cases (threshold and date edges, budget edges, conflicting/unavailable/malformed vendor evidence, unknown and blocked vendors, unknown requester, prompt injection in request text and in API data, sensitive data visible only in the text, vague purpose, invalid fields, and combinations). Inputs: `evals/cases/cases.json`.
+- **Labels:** I labelled every case from the policy, and an independent AI agent labelled the same cases blind (it saw only the policy and data). We agreed on 39/39 next actions and 37/39 approval sets; I settled the two disagreements in `evals/adjudication.md`. Final labels: `evals/cases/labels.json`.
 - **Scoring is done by code**, not an LLM judge: exact action, exact approval set, required and forbidden flags, missing-information items, evidence content, under- and over-escalation, plus the public runner's minimum checks.
-- **Reference row:** `rules` runs the same pipeline with no LLM, to show what the model adds.
-- **Faults are injected** per case by the eval's own vendor-risk service (timeout, malformed response, outage).
+- **Reference row:** I added `rules`, which runs the same pipeline with no LLM, to show what the model adds.
+- **I inject faults** per case by the eval's own vendor-risk service (timeout, malformed response, outage).
+- **Held-out check:** after the main run, an AI agent wrote 13 new hidden-style cases (new vendors, requesters and values) and labelled them blind from the policy. The deterministic engine passes 13/13 with no missed or extra reviewers. See `evals/hidden/README.md`.
 - **Outputs:** `evals/results/FINAL_RESULTS.md` (tables), `final_per_case.csv`, and one trace per run in `evals/results/traces/` (rules, A) and `evals/results_staged/traces/` (B). `run_eval.py` writes `summary.md` for whatever it just ran.
-- **Reproducible:** every LLM response is recorded in `evals/llm_cache/`; the replay commands under **Reproduce** re-run A and B without a key or model.
+- **Reproducible:** I record every LLM response in `evals/llm_cache/`; the replay commands under **Reproduce** re-run A and B without a key or model.
 
 ### Results
 
-Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (thinking off, temperature 0, one repeat). Free-tier Gemini allowed about 20 requests per model per day, too few for this comparison. Local inference took about 1 to 12 minutes of model time per case, so A finished 9 cases and B 28 before the deadline; A and B are compared only on cases both finished. Full tables and every failure: [evals/results/FINAL_RESULTS.md](evals/results/FINAL_RESULTS.md).
+I ran `qwen/qwen3.5-9b` in LM Studio on my MacBook Air (thinking off, temperature 0, one repeat). Free-tier Gemini allowed about 20 requests per model per day, too few for this comparison. Local inference took about 1 to 12 minutes of model time per case, so A finished 9 cases and B 28 in the time I had; I compare A and B only on cases both finished. Full tables and every failure: [evals/results/FINAL_RESULTS.md](evals/results/FINAL_RESULTS.md).
 
 **A vs B on the 9 matched cases (the starter's REQ-1001 to REQ-1009, including all 6 public cases):**
 
@@ -102,7 +103,11 @@ Model: `qwen/qwen3.5-9b` in LM Studio on a MacBook Air (thinking off, temperatur
 
 ## Architecture decision
 
-**Ship B (staged).** Same full-pass rate as A on the matched cases (7/9; B better on next action, A better on approvals and flags), 2.5 times fewer LLM calls, about 3 times lower latency, fixed cost per request, and evidence gathering that cannot skip a check because it is plain code. The model is only asked the judgment questions the rules cannot answer. Memo (under 500 words): [docs/decision_memo.md](docs/decision_memo.md).
+**I would ship B (staged).** Same full-pass rate as A on the matched cases (7/9; B better on next action, A better on approvals and flags), 2.5 times fewer LLM calls, about 3 times lower latency, fixed cost per request, and evidence gathering that cannot skip a check because it is plain code. The model is only asked the judgment questions the rules cannot answer. My memo (under 500 words): [docs/decision_memo.md](docs/decision_memo.md).
+
+## How I used AI
+
+The brief encourages AI use, so I used it as a team: I set the design (code decides, the model only adds reviews, humans approve), the test plan and the ship rule, and used Claude Code to implement and run them. Separate AI agents worked as independent checkers: one labelled the test set blind, one reviewed the code (it found 12 defects, each fixed with a regression test), one wrote held-out cases, and one used the repo as a grader from a clean clone. Every claim in this README was checked against the result files.
 
 ## Known limitations
 
